@@ -1,0 +1,23 @@
+{
+  "name": "igenweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+ "scripts": {
+  "dev": "astro dev",
+  "start": "astro dev",
+  "build": "astro build",
+  "preview": "astro preview",
+  "astro": "astro"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "astro": "^5.13.5",
+    "preline": "^3.2.3"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.12"
+  }
+}
