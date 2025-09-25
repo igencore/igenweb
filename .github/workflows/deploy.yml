@@ -24,7 +24,8 @@ jobs:
         run: flutter pub get
 
       - name: Build Flutter web app
-        run: flutter build web --web-renderer canvaskit --base-href /igenweb/
+        # Eliminamos --web-renderer canvaskit
+        run: flutter build web --base-href /igenweb/
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
