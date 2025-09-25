@@ -66497,7 +66497,7 @@ ak(){return new A.IJ()}}
 A.IJ.prototype={
 ar(){var s,r=this
 r.aU()
-s=new A.Hm(A.kF("https://res.cloudinary.com/dial3sreb/video/upload/v1758777722/hero1_nwy7y0.webm").k(0),B.Og,$.ay())
+s=new A.Hm(A.kF("https://res.cloudinary.com/dial3sreb/video/upload/vc_auto,q_auto,f_auto/v1758777722/hero1_nwy7y0.webm").k(0),B.Og,$.ay())
 s.dc().bk(new A.a6Z(r),t.P)
 r.d=s
 s.Z(new A.a7_(r))},
