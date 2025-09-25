@@ -23,17 +23,13 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.networkUrl(
-      Uri.parse('https://res.cloudinary.com/dial3sreb/video/upload/vc_auto,q_auto,f_auto/v1758777722/hero1_nwy7y0.webm'),
-    );
-
-    _controller.initialize().then((_) {
+      Uri.parse('https://res.cloudinary.com/dial3sreb/video/upload/v1758777722/hero1_nwy7y0.webm'),
+    )..initialize().then((_) {
         if (!mounted) {
           return;
         }
-
         _controller.setVolume(0);
         if (widget.shouldAutoplay) {
-          // El video se reproducirá tan pronto como esté listo.
           _controller.play();
         }
         setState(() {});
@@ -58,17 +54,24 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    if (_controller.value.isInitialized) {
-      return FittedBox(
-        fit: BoxFit.cover, // Esto asegura que el video cubra el espacio sin distorsión
-        child: SizedBox(
-          width: _controller.value.size.width,
-          height: _controller.value.size.height,
-          child: VideoPlayer(_controller),
-        ),
-      );
-    } else {
-      return const Center(child: CircularProgressIndicator());
-    }
+    // Usamos ValueListenableBuilder para escuchar el estado del controlador
+    return ValueListenableBuilder<VideoPlayerValue>(
+      valueListenable: _controller,
+      builder: (context, value, child) {
+        if (!value.isInitialized) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        // El FittedBox ahora se construye solo cuando el video está inicializado
+        return FittedBox(
+          fit: BoxFit.cover,
+          child: SizedBox(
+            width: value.size.width,
+            height: value.size.height,
+            child: VideoPlayer(_controller),
+          ),
+        );
+      },
+    );
   }
 }
