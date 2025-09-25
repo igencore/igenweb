@@ -22,15 +22,18 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl( // <-- Cambiamos a networkUrl
-      Uri.parse('https://res.cloudinary.com/dial3sreb/video/upload/v1758777722/hero1_nwy7y0.webm'), // <-- Usamos la URL de Cloudinary
-    )..initialize().then((_) {
+    _controller = VideoPlayerController.networkUrl(
+      Uri.parse('https://res.cloudinary.com/dial3sreb/video/upload/v1758777722/hero1_nwy7y0.webm'),
+    );
+
+    _controller.initialize().then((_) {
         if (!mounted) {
           return;
         }
 
         _controller.setVolume(0);
         if (widget.shouldAutoplay) {
+          // El video se reproducirá tan pronto como esté listo.
           _controller.play();
         }
         setState(() {});
