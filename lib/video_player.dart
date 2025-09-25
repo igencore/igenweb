@@ -23,7 +23,7 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.networkUrl(
-      Uri.parse('https://res.cloudinary.com/dial3sreb/video/upload/v1758777722/hero1_nwy7y0.webm'),
+      Uri.parse('https://res.cloudinary.com/dial3sreb/video/upload/vc_auto,q_auto,f_auto/v1758777722/hero1_nwy7y0.webm'),
     )..initialize().then((_) {
         if (!mounted) {
           return;
