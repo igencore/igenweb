@@ -22,8 +22,8 @@ class _CustomVideoPlayerState extends State<CustomVideoPlayer> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset(
-      'assets/videos/hero1.webm',
+    _controller = VideoPlayerController.networkUrl( // <-- Cambiamos a networkUrl
+      Uri.parse('https://res.cloudinary.com/dial3sreb/video/upload/v1758777722/hero1_nwy7y0.webm'), // <-- Usamos la URL de Cloudinary
     )..initialize().then((_) {
         if (!mounted) {
           return;
