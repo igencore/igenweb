@@ -66497,9 +66497,9 @@ A.IJ.prototype={
 ar(){var s,r=this
 r.aU()
 s=new A.Hm(A.kE("https://res.cloudinary.com/dial3sreb/video/upload/v1758777722/hero1_nwy7y0.webm").k(0),B.Og,$.ay())
-s.dc().bk(new A.a6Y(r),t.P)
 r.d=s
-s.Z(new A.a6Z(r))},
+s.dc().bk(new A.a6Y(r),t.P)
+r.d.Z(new A.a6Z(r))},
 l(){var s=this.d
 s===$&&A.a()
 s.l()
