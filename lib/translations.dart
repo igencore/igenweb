@@ -16,8 +16,14 @@ final Map<String, dynamic> appTranslations = {
     'research_3': 'Research 3',
     'contact': 'Contact',
     'welcome_message': 'Welcome to iGenCore!',
-    'hero_title': 'Technology for large-scale mining',
-    'hero_subtitle': 'excelling in geological exploration, reagents, and fluid transport.',
+    // === HERO SECTION ===
+    'hero_title': 'Operational innovation for large-scale mining',
+    'hero_subtitle': 'Comprehensive solutions focused on operational excellence.',
+    'hero_button_text': 'About us', 
+    // === SERVICES INTRO SECTION ===
+    'services_intro_title': 'Our Services',
+    'services_intro_subtitle': 'Comprehensive technological solutions to optimize efficiency and safety in large-scale mining.',
+    'services_button_text': 'Services',
   },
   'ES': {
     'home': 'Inicio',
@@ -34,7 +40,13 @@ final Map<String, dynamic> appTranslations = {
     'research_3': 'Investigación 3',
     'contact': 'Contacto',
     'welcome_message': '¡Bienvenido a iGenCore!',
-    'hero_title': 'Tecnología para la gran minería',
-    'hero_subtitle': 'destacando en la exploración geológica, reactivos y el transporte de fluidos.',
+      // === HERO SECTION ===
+    'hero_title': 'Innovación para la gran minería',
+    'hero_subtitle': 'Soluciones integrales enfocadas a la excelencia operacional.',
+    'hero_button_text': 'Saber más',
+    // === SERVICES INTRO SECTION ===
+    'services_intro_title': 'Nuestros Servicios',
+    'services_intro_subtitle': 'Soluciones tecnológicas integrales para optimizar la eficiencia y seguridad en la gran minería.',
+    'services_button_text': 'Servicios',
   },
 };

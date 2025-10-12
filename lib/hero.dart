@@ -2,12 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'translations.dart';
-import 'video_player.dart';
+import 'heroslider.dart'; 
 
 class HeroSection extends StatelessWidget {
   final ValueNotifier<String> languageNotifier;
 
   const HeroSection({super.key, required this.languageNotifier});
+
+  // FUNCIÓN DE ACCIÓN: Se define aquí para ser llamada por los botones.
+  void _handleButtonTap(BuildContext context) {
+    // Aquí iría la lógica de navegación real a la sección de contacto o servicios.
+    debugPrint("Botón 'Hero CTA' presionado. Navegando a la acción principal..."); 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,34 +23,41 @@ class HeroSection extends StatelessWidget {
         valueListenable: languageNotifier,
         builder: (context, language, _) {
           final heroText = appTranslations[language]!;
-          final isDesktop = MediaQuery.of(context).size.width > 1200;
+          
+          // PUNTO DE QUIEBRE AJUSTADO: Se convierte a móvil/tablet a 1000px
+          final isDesktop = MediaQuery.of(context).size.width > 1000; 
+          
           if (isDesktop) {
-            return _buildDesktopHeroSection(heroText);
+            // Se pasa el context al método de construcción
+            return _buildDesktopHeroSection(context, heroText); 
           } else {
-            return _buildMobileHeroSection(heroText);
+            // Se pasa el context al método de construcción
+            return _buildMobileHeroSection(context, heroText);
           }
         },
       ),
     );
   }
 
-  Widget _buildDesktopHeroSection(Map<String, dynamic> heroText) {
-    // Forzamos la Card a ocupar todo el ancho disponible.
+  // MODIFICACIÓN: Ahora acepta BuildContext para usar _handleButtonTap
+  Widget _buildDesktopHeroSection(BuildContext context, Map<String, dynamic> heroText) {
+    const double cardHorizontalPadding = 32.0; 
+    const double innerHorizontalPadding = 32.0; 
+
     return SizedBox(
       width: double.infinity,
       child: Card(
         elevation: 8,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Padding(
-          padding: const EdgeInsets.all(48.0),
+          padding: EdgeInsets.all(cardHorizontalPadding),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            // Eliminamos mainAxisSize.min para que la fila se expanda.
             children: [
               Expanded(
                 flex: 2,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 48.0, vertical: 64.0),
+                  padding: const EdgeInsets.symmetric(horizontal: innerHorizontalPadding, vertical: 64.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -57,6 +70,20 @@ class HeroSection extends StatelessWidget {
                         heroText['hero_subtitle'],
                         style: const TextStyle(fontSize: 20),
                       ),
+                      
+                      // INICIO: Botón CTA para Desktop
+                      const SizedBox(height: 32),
+                      FilledButton(
+                        onPressed: () => _handleButtonTap(context),
+                        style: FilledButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                          textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          foregroundColor: Theme.of(context).colorScheme.onPrimary, 
+                        ),
+                        child: Text(heroText['hero_button_text']),
+                      ),
+                      // FIN: Botón CTA para Desktop
                     ],
                   ),
                 ),
@@ -65,27 +92,13 @@ class HeroSection extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 48.0),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: ShaderMask(
-                      shaderCallback: (Rect bounds) {
-                        return const LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.transparent,
-                            Color.fromRGBO(0, 0, 0, 0.5),
-                            Color.fromRGBO(0, 0, 0, 0.5),
-                            Colors.transparent,
-                          ],
-                          stops: [0.0, 0.1, 0.9, 1.0],
-                        ).createShader(bounds);
-                      },
-                      blendMode: BlendMode.dstIn,
+                  padding: const EdgeInsets.only(right: innerHorizontalPadding),
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
                       child: const SizedBox(
                         height: 400,
-                        child: CustomVideoPlayer(),
+                        child: HeroSlider(), 
                       ),
                     ),
                   ),
@@ -98,7 +111,8 @@ class HeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildMobileHeroSection(Map<String, dynamic> heroText) {
+  // MODIFICACIÓN: Ahora acepta BuildContext para usar _handleButtonTap
+  Widget _buildMobileHeroSection(BuildContext context, Map<String, dynamic> heroText) {
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -109,25 +123,9 @@ class HeroSection extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return const LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Color.fromRGBO(0, 0, 0, 0.5),
-                      Color.fromRGBO(0, 0, 0, 0.5),
-                      Colors.transparent,
-                    ],
-                    stops: [0.0, 0.1, 0.9, 1.0],
-                  ).createShader(bounds);
-                },
-                blendMode: BlendMode.dstIn,
-                child: const SizedBox(
-                  height: 400,
-                  child: CustomVideoPlayer(),
-                ),
+              child: const SizedBox(
+                height: 400,
+                child: HeroSlider(), 
               ),
             ),
             const SizedBox(height: 16),
@@ -148,6 +146,20 @@ class HeroSection extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 16),
                   ),
+                  
+                  // INICIO: Botón CTA para Mobile
+                  const SizedBox(height: 24),
+                  FilledButton(
+                    onPressed: () => _handleButtonTap(context),
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary, 
+                    ),
+                    child: Text(heroText['hero_button_text']),
+                  ),
+                  // FIN: Botón CTA para Mobile
                 ],
               ),
             ),
