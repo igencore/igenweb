@@ -117,14 +117,14 @@ class HeroSection extends StatelessWidget {
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: const SizedBox(
-                height: 400,
+               // height: 400,
                 child: HeroSlider(), 
               ),
             ),
@@ -138,7 +138,7 @@ class HeroSection extends StatelessWidget {
                   Text(
                     heroText['hero_title'],
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, height: 1.2),
                   ),
                   const SizedBox(height: 8),
                   Text(

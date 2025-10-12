@@ -1,4 +1,4 @@
-// Archivo: lib/logo_carousel.dart
+// Archivo: lib/logo_carousel.dart (Limpiado y Final)
 
 import 'package:flutter/material.dart';
 
@@ -9,138 +9,122 @@ class LogoCarousel extends StatefulWidget {
   State<LogoCarousel> createState() => _LogoCarouselState();
 }
 
-class _LogoCarouselState extends State<LogoCarousel> {
-  final ScrollController _scrollController = ScrollController();
+class _LogoCarouselState extends State<LogoCarousel> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late ScrollController _scrollController;
   
-  // Lista de logos (sin cambios)
-  final List<String> logoPaths = [
-    'assets/images/logos/logo1.png',
-    'assets/images/logos/logo2.png',
-    'assets/images/logos/logo3.png',
-    'assets/images/logos/logo4.png',
-    'assets/images/logos/logo5.png',
-    'assets/images/logos/logo1.png',
-    'assets/images/logos/logo2.png',
-    'assets/images/logos/logo3.png',
-    'assets/images/logos/logo4.png',
-    'assets/images/logos/logo5.png',
+  // Lista de logos: ahora es 'final'
+  final List<String> originalLogoPaths = const [
     'assets/images/logos/logo1.png',
     'assets/images/logos/logo2.png',
     'assets/images/logos/logo3.png',
     'assets/images/logos/logo4.png',
     'assets/images/logos/logo5.png',
   ];
+  
+  // Usamos un número alto para que el ListView parezca infinito
+  static const int itemCount = 1000; 
+
+  // Constantes de dimensiones
+  static const double logoMaxHeight = 56.0; 
+  static const double logoEstimatedWidth = 110.0; 
+  static const double logoHorizontalPadding = 24.0; 
+  static const double logoFullEstimatedWidth = logoEstimatedWidth + (logoHorizontalPadding * 2); 
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _startScrolling());
-  }
-
-  void _startScrolling() {
-    const duration = Duration(seconds: 30); 
     
-    if (!_scrollController.hasClients || _scrollController.position.maxScrollExtent == 0) {
-      Future.delayed(const Duration(milliseconds: 50), () => _startScrolling());
-      return;
-    }
-
-    final double maxScroll = _scrollController.position.maxScrollExtent;
-
-    _scrollController.animateTo(
-      maxScroll,
-      duration: duration,
-      curve: Curves.linear,
-    ).then((_) {
+    _scrollController = ScrollController();
+    
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 30), 
+    );
+    
+    // Calcula el ancho de un solo loop para la traslación.
+    final double singleLoopWidth = originalLogoPaths.length * logoFullEstimatedWidth;
+    
+    // La animación mueve la posición de scroll.
+    _animationController.addListener(() {
+      if (!_scrollController.hasClients) return;
+      
+      // Calculamos la posición de scroll basada en el valor de la animación (0.0 a 1.0)
+      // La animación debe ir de 0 al ancho de un solo loop.
+      double scrollPosition = _animationController.value * singleLoopWidth;
+      
+      // Si la posición calculada se acerca al final del primer loop,
+      // la reiniciamos suavemente al inicio para un efecto continuo.
+      // Usamos el módulo (%) para garantizar el loop infinito continuo.
+      scrollPosition = scrollPosition % singleLoopWidth;
+      
+      // Intentar saltar a la nueva posición.
       if (_scrollController.hasClients) {
-        _scrollController.jumpTo(0.0);
-        _startScrolling();
+          _scrollController.jumpTo(scrollPosition);
       }
     });
+
+    _animationController.repeat();
   }
 
   @override
   void dispose() {
+    _animationController.stop();
+    _animationController.dispose();
     _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isDesktop = screenWidth > 900; 
     
-    // Altura máxima para los logos (80px * 0.7 = 56px)
-    const logoMaxHeight = 56.0; 
-    
-    // ANCHO ESTIMADO AJUSTADO: Usamos 110px para un logo, más padding
-    const logoEstimatedWidth = 110.0;
-    const logoHorizontalPadding = 24.0; 
-    const logoFullEstimatedWidth = logoEstimatedWidth + (logoHorizontalPadding * 2); // 158.0
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Obtenemos el ancho visible disponible
+        final double screenWidth = constraints.maxWidth;
+        
+        // Eliminamos el NotificationListener ya que _isScrollingByUser fue eliminado.
+        return Center(
+          child: SizedBox(
+            width: screenWidth, // Contenedor que define el área visible
+            height: logoMaxHeight, 
+            
+            child: ListView.builder(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              // Deshabilitamos el scroll manual para que solo la animación lo mueva.
+              physics: const NeverScrollableScrollPhysics(), 
+              itemCount: itemCount, 
+              
+              itemBuilder: (context, index) {
+                // Obtenemos el logo de la lista original usando el módulo (%)
+                final path = originalLogoPaths[index % originalLogoPaths.length];
+                
+                final logoColor = Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withAlpha(77); 
 
-    // CÁLCULO DEL ANCHO MÁXIMO DEL CARRUSEL SEGÚN EL DISPOSITIVO
-    double maxCarouselWidth;
-    if (isDesktop) {
-        maxCarouselWidth = 1000.0; 
-    } else if (screenWidth > 600) { 
-        // Tablet: Límite para 4 logos (usando el ancho estimado)
-        maxCarouselWidth = 4 * logoFullEstimatedWidth; // 4 * 158 = 632.0
-    } else {
-        // Móvil: Límite para 3 logos (usando el ancho estimado)
-        maxCarouselWidth = 3 * logoFullEstimatedWidth; // 3 * 158 = 474.0
-    }
-
-    // Calculamos el ancho del fade (5% del maxCarouselWidth)
-    final fadeWidth = maxCarouselWidth * 0.05; 
-    
-    final shaderMask = ShaderMask(
-      shaderCallback: (Rect bounds) {
-        return LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            Theme.of(context).scaffoldBackgroundColor, 
-            Colors.transparent, 
-            Colors.transparent,
-            Theme.of(context).scaffoldBackgroundColor, 
-          ],
-          // Stops dinámicos
-          stops: [0.0, fadeWidth / bounds.width, 1.0 - (fadeWidth / bounds.width), 1.0], 
-        ).createShader(bounds);
-      },
-      blendMode: BlendMode.dstOut, 
-      
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxCarouselWidth), 
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: logoMaxHeight), // <--- ALTURA AJUSTADA A 56px
-          child: ListView.builder(
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            physics: const NeverScrollableScrollPhysics(), 
-            itemCount: logoPaths.length,
-            itemBuilder: (context, index) {
-              final logoColor = Theme.of(context)
-                  .colorScheme
-                  .onSurface
-                  .withAlpha(77); 
-
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: logoHorizontalPadding),
-                child: Image.asset(
-                  logoPaths[index],
-                  fit: BoxFit.fitHeight, 
-                  color: logoColor, 
-                ),
-              );
-            },
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: logoHorizontalPadding),
+                  
+                  child: Container( 
+                    height: logoMaxHeight, 
+                    width: logoEstimatedWidth, // Ancho fijo para que el ListView sepa su tamaño
+                    alignment: Alignment.center,
+                    
+                    child: Image.asset(
+                      path,
+                      fit: BoxFit.fitHeight, // Permite proporciones variables dentro del ancho fijo
+                      color: logoColor, 
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      ),
-    );
-
-    return Center(
-      child: shaderMask,
+        );
+      },
     );
   }
 }

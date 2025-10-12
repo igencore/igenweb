@@ -51,7 +51,7 @@ class ResearchSection extends StatelessWidget {
                   ), 
                 
                 ),
-                padding: const EdgeInsets.all(48.0),
+                padding: const EdgeInsets.all(36.0),
                 child: Column(
                   children: [
                     // Título principal de la sección

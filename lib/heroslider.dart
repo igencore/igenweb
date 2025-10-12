@@ -18,41 +18,31 @@ class _HeroSliderState extends State<HeroSlider> with SingleTickerProviderStateM
 
   late AnimationController _controller;
   int _currentIndex = 0;
-  // Usaremos un índice para rastrear la imagen que se desvanece
   int _previousIndex = 0; 
 
   @override
   void initState() {
     super.initState();
-    // Duración total de cada slide (incluye el tiempo de transición)
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500), // Duración total de la transición
+      duration: const Duration(milliseconds: 1500),
     )..addListener(() {
       setState(() {});
     });
-
-    // Inicia el cambio de imagen cada 4 segundos
     _startSlideshow();
   }
 
   void _startSlideshow() {
-    // Definimos un timer para cambiar la imagen cada 4 segundos (incluyendo la transición)
     Future.delayed(const Duration(seconds: 4), () {
       if (!mounted) return;
       
-      // 1. Guardar el índice actual como el índice anterior
       _previousIndex = _currentIndex;
       
-      // 2. Moverse al siguiente índice
       setState(() {
         _currentIndex = (_currentIndex + 1) % images.length;
       });
 
-      // 3. Reiniciar el controlador para que la nueva imagen se fusione
       _controller.forward(from: 0.0).then((_) {
-        // Cuando la fusión termine, pausar la animación
-        // y comenzar el timer para el próximo cambio
         _controller.value = 1.0; 
         _startSlideshow();
       });
@@ -73,35 +63,58 @@ class _HeroSliderState extends State<HeroSlider> with SingleTickerProviderStateM
       curve: Curves.easeInOut,
     );
 
-    return SizedBox(
-      height: 400,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          // 1. IMAGEN ANTERIOR (Base, Opacidad 1.0)
-          // Se mantiene visible hasta que la nueva la cubre.
-          Image.asset(
-            images[_previousIndex],
-            fit: BoxFit.cover, 
-            key: ValueKey<int>(_previousIndex), // Clave para forzar la actualización
-          ),
+    // 1. Usamos LayoutBuilder para obtener las restricciones de ancho (maxWidth)
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // En HeroSection.dart, el punto de quiebre para móvil es 1000.
+        // Aquí, usamos un punto de quiebre similar, pero basándonos en el ancho
+        // disponible para el HeroSlider. Generalmente, un ancho disponible bajo
+        // (ej. < 600) indica un dispositivo móvil.
+        final isMobile = constraints.maxWidth < 600;
+        
+        // 2. Definimos la altura o AspectRatio condicionalmente
+        Widget sliderContent = Stack(
+          fit: StackFit.expand,
+          children: [
+            // 1. IMAGEN ANTERIOR
+            Image.asset(
+              images[_previousIndex],
+              fit: BoxFit.cover, 
+              key: ValueKey<int>(_previousIndex),
+            ),
 
-          // 2. IMAGEN ACTUAL (Se fusiona encima, Opacidad 0.0 -> 1.0)
-          AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) {
-              return Opacity(
-                opacity: animation.value, // Opacidad animada: 0.0 (transparente) a 1.0 (opaca)
-                child: Image.asset(
-                  images[_currentIndex],
-                  fit: BoxFit.cover,
-                  key: ValueKey<int>(_currentIndex + 100), // Clave diferente
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+            // 2. IMAGEN ACTUAL
+            AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: animation.value,
+                  child: Image.asset(
+                    images[_currentIndex],
+                    fit: BoxFit.cover,
+                    key: ValueKey<int>(_currentIndex + 100),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+
+        if (isMobile) {
+          // 3. En MÓVIL: Forzar relación 1:1 (cuadrado)
+          // Usamos AspectRatio, y su altura será determinada por el ancho disponible.
+          return AspectRatio(
+            aspectRatio: 1.0, // 1:1
+            child: sliderContent,
+          );
+        } else {
+          // 4. En ESCRITORIO/TABLETA: Mantener la altura fija definida por el padre (HeroSection.dart)
+          return SizedBox(
+            height: constraints.maxHeight.isFinite ? constraints.maxHeight : 400, // Usar 400 si el padre no la impone
+            child: sliderContent,
+          );
+        }
+      },
     );
   }
 }

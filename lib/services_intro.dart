@@ -1,8 +1,9 @@
-// Archivo: lib/services_intro.dart
+// Archivo: lib/services_intro.dart (Optimizado para Rendimiento Móvil y Scroll)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; 
 import 'dart:math';
+import 'dart:ui'; // Necesario para PointMode
 
 import 'translations.dart'; 
 
@@ -10,7 +11,6 @@ class ServicesIntroSection extends StatelessWidget {
   final ValueNotifier<String> languageNotifier;
   final VoidCallback onServicesTap; 
 
-  // ... (código ServicesIntroSection se mantiene igual) ...
   const ServicesIntroSection({
     super.key, 
     required this.languageNotifier,
@@ -32,12 +32,11 @@ class ServicesIntroSection extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 800), 
               child: Column(
                 children: [
-                  // ... (Título y Subtítulo se mantienen igual) ...
                   Text(
                     serviceText['services_intro_title'],
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 40,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.onSurface, 
                     ),
@@ -54,8 +53,11 @@ class ServicesIntroSection extends StatelessWidget {
                   const SizedBox(height: 48),
                   
                   // ANIMACIÓN DE NUBE DE PUNTOS
-                  ReliefPointCloudAnimation(
-                    themeModeNotifier: ValueNotifier(Theme.of(context).brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light),
+                  // CLAVE DE OPTIMIZACIÓN: RepaintBoundary aísla la pintura compleja del scroll.
+                  RepaintBoundary( 
+                    child: ReliefPointCloudAnimation(
+                      themeModeNotifier: ValueNotifier(Theme.of(context).brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light),
+                    ),
                   ),
                   
                   const SizedBox(height: 40), 
@@ -68,8 +70,6 @@ class ServicesIntroSection extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
-                   //   backgroundColor: buttonBackgroundColor,
-                    //  foregroundColor: buttonForegroundColor,
                     ),
                     child: Text(
                       serviceText['services_button_text'] ?? 'Servicios',
@@ -103,15 +103,20 @@ class ReliefPointCloudAnimation extends HookWidget {
     final baseColor = Theme.of(context).colorScheme.onSurface;
     final primaryColor = Theme.of(context).colorScheme.primary; 
 
-    // Detectar si estamos en escritorio (opcional, para escalado condicional)
-    final isDesktop = MediaQuery.of(context).size.width > 800;
+    // Detectar si estamos en móvil para reducir la carga de cómputo.
+    final screenWidth = MediaQuery.of(context).size.width;
+    // Consideramos móvil o tablet pequeña si el ancho es menor a 800
+    final bool isMobile = screenWidth < 800; 
     
-    // Aumento del 30% para escritorio (si el ancho es > 800px)
+    // Conteo de puntos reducido para móviles: 25x25 (625 puntos) vs 40x40 (1600 puntos)
+    final int numPoints = isMobile ? 25 : 40; // <-- CLAVE: REDUCCIÓN CONDICIONAL
+
+    // Aumento de tamaño para escritorio (si el ancho es > 800px)
     final double baseWidth = 600;
     final double baseHeight = 300;
     
-    final double width = isDesktop ? baseWidth * 1.3 : baseWidth; // 600 * 1.3 = 780
-    final double height = isDesktop ? baseHeight * 1.3 : baseHeight; // 300 * 1.3 = 390
+    final double width = !isMobile ? baseWidth * 1.3 : baseWidth; 
+    final double height = !isMobile ? baseHeight * 1.3 : baseHeight;
     
     return AnimatedBuilder(
       animation: rotationController, 
@@ -125,6 +130,8 @@ class ReliefPointCloudAnimation extends HookWidget {
               animationValue: rotationController.value, 
               baseColor: baseColor,
               primaryColor: primaryColor, 
+              numPointsX: numPoints, // <-- PASAR EL VALOR REDUCIDO
+              numPointsY: numPoints, // <-- PASAR EL VALOR REDUCIDO
             ),
           ),
         );
@@ -139,8 +146,10 @@ class ReliefPainter extends CustomPainter {
   final Color baseColor;
   final Color primaryColor; 
 
-  final int numPointsX = 40; 
-  final int numPointsY = 40; 
+  // Aceptar el conteo de puntos desde el widget
+  final int numPointsX; 
+  final int numPointsY; 
+
   final double spacing = 10.0; 
   final double terraceHeight = 8.0; 
   final double maxReliefDepth = 120.0; 
@@ -151,7 +160,14 @@ class ReliefPainter extends CustomPainter {
   final Offset craterCenter1 = const Offset(-40.0, 0.0);
   final Offset craterCenter2 = const Offset(40.0, 0.0); 
 
-  ReliefPainter({super.repaint, required this.animationValue, required this.baseColor, required this.primaryColor});
+  ReliefPainter({
+    super.repaint, 
+    required this.animationValue, 
+    required this.baseColor, 
+    required this.primaryColor,
+    this.numPointsX = 40, 
+    this.numPointsY = 40, 
+  });
 
   double _noise(double x, double y, double t) {
     double n = 0;
@@ -223,29 +239,36 @@ class ReliefPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // ... (El código de paint se mantiene igual) ...
+    
     final linePaint = Paint()
       ..color = primaryColor.withAlpha(26) 
       ..strokeWidth = 0.5
       ..style = PaintingStyle.stroke;
 
-    final pointPaint = Paint()
-      ..strokeWidth = 1.8; 
-
+    // Pintura de puntos configurada para drawPoints
+    final pointPaint = Paint() 
+      ..strokeCap = StrokeCap.round 
+      ..strokeWidth = 1.8 
+      ..color = baseColor.withAlpha(128)
+      ..style = PaintingStyle.stroke; 
+      
+    final List<Offset> pointsToDraw = []; 
     final List<List<Offset>> projectedPoints = List.generate(numPointsX, (_) => List.filled(numPointsY, Offset.zero));
 
-    // 1. CALCULAR PROYECCIONES
+    // 1. CALCULAR PROYECCIONES y LLENAR LISTA DE PUNTOS
     for (int i = 0; i < numPointsX; i++) {
       for (int j = 0; j < numPointsY; j++) {
         final x3d = (i - numPointsX / 2) * spacing;
         final y3d = (j - numPointsY / 2) * spacing;
         final z3d = getReliefHeight(x3d, y3d);
         
-        projectedPoints[i][j] = project(x3d, y3d, z3d, size);
+        final projected = project(x3d, y3d, z3d, size);
+        projectedPoints[i][j] = projected;
+        pointsToDraw.add(projected); 
       }
     }
     
-    // 2. DIBUJAR LÍNEAS (MESH)
+    // 2. DIBUJAR LÍNEAS (MESH) 
     for (int j = 0; j < numPointsY; j++) { 
       for (int i = 0; i < numPointsX; i++) {
         final current = projectedPoints[i][j];
@@ -265,25 +288,9 @@ class ReliefPainter extends CustomPainter {
       }
     }
 
-    // 3. DIBUJAR PUNTOS
-    for (int i = 0; i < numPointsX; i++) {
-      for (int j = 0; j < numPointsY; j++) {
-        final current = projectedPoints[i][j];
-        
-        if (current == Offset.zero) continue; 
-
-     //   final x3d = (i - numPointsX / 2) * spacing;
-      //  final y3d = (j - numPointsY / 2) * spacing;
-     //   final zHeight = getReliefHeight(x3d, y3d);
-
-        // Opacidad basada en la altura
-       // final normalizedZ = (zHeight + maxReliefDepth) / (maxReliefDepth * 2); 
-       // final opacity = 0.3 + normalizedZ.clamp(0.0, 1.0) * 0.7; 
-        
-        pointPaint.color = baseColor.withAlpha(128);
-        
-        canvas.drawCircle(current, pointPaint.strokeWidth / 2, pointPaint);
-      }
+    // 3. DIBUJAR PUNTOS - ¡OPTIMIZADO CON drawPoints!
+    if (pointsToDraw.isNotEmpty) {
+      canvas.drawPoints(PointMode.points, pointsToDraw, pointPaint); 
     }
   }
 
@@ -291,6 +298,8 @@ class ReliefPainter extends CustomPainter {
   bool shouldRepaint(ReliefPainter oldDelegate) {
     return oldDelegate.animationValue != animationValue ||
            oldDelegate.baseColor != baseColor ||
-           oldDelegate.primaryColor != primaryColor;
+           oldDelegate.primaryColor != primaryColor ||
+           oldDelegate.numPointsX != numPointsX || 
+           oldDelegate.numPointsY != numPointsY; 
   }
 }
