@@ -1,0 +1,305 @@
+// Archivo: lib/pages/research_page.dart (FINAL CON IMAGEN INTRODUCTORIA y enlaces deshabilitados)
+
+import 'package:flutter/material.dart';
+// import 'package:go_router/go_router.dart'; <-- Necesario para los enlaces
+import '../app_shell.dart'; 
+import '../components/footer_section.dart';
+import '../translations.dart'; 
+
+// ==========================================================
+// researchImages
+// ==========================================================
+const List<String> researchImages = [
+  'assets/images/research_img_1.jpg',
+  'assets/images/research_img_2.png',
+  'assets/images/research_img_3.png',
+];
+
+class ResearchPage extends StatelessWidget {
+  const ResearchPage({super.key});
+
+  // ====================================================================
+  // FUNCIÓN HELPER: Convierte String a IconData (Sin cambios)
+  // ====================================================================
+  IconData _getIconData(String iconName) {
+    switch (iconName) {
+      case 'science': return Icons.science;
+      case 'insights': return Icons.insights;
+      case 'psychology': return Icons.psychology;
+      case 'memory_outlined': return Icons.memory_outlined;
+      default: return Icons.article; 
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final languageNotifier = AppState.of(context).languageNotifier;
+    final backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 900;
+
+    return SingleChildScrollView(
+      child: Container(
+        color: backgroundColor,
+        constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
+        
+        child: ValueListenableBuilder<String>(
+          valueListenable: languageNotifier,
+          builder: (context, language, child) {
+            final translations = appTranslations[language] as Map<String, dynamic>? ?? {};
+            
+            final researchData = translations['research_data'] as List<dynamic>? ?? [];
+            final readMoreCta = translations['research_read_more_cta'] as String? ?? 'Read Article';
+
+            return Column(
+              children: [
+                // 1. IMAGEN INTRODUCTORIA
+                _buildIntroductoryImage(context, translations, colorScheme), 
+                
+                // 2. HEADER (Bajada de texto)
+                _buildHeader(context, translations, colorScheme),
+                
+                // 3. LISTADO DE ARTÍCULOS
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 1200),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                  child: isDesktop
+                      ? _buildDesktopGrid(context, researchData, colorScheme, readMoreCta)
+                      : _buildMobileList(context, researchData, colorScheme, readMoreCta),
+                ),
+                
+                const SizedBox(height: 40),
+                
+                // 4. FOOTER
+                const FooterSection(),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+  
+  // ====================================================================
+  // WIDGET INTRODUCTORIO (Sin cambios)
+  // ====================================================================
+  Widget _buildIntroductoryImage(BuildContext context, Map<String, dynamic> translations, ColorScheme colorScheme) {
+    final isDesktop = MediaQuery.of(context).size.width > 900;
+    
+    final heroTitle = translations['research_intro_title'] as String? ?? 'Investigación Científica';
+    
+    final String imageUrl = researchImages.isNotEmpty 
+      ? researchImages[0] 
+      : 'assets/images/default_research_placeholder.jpg'; 
+
+    return Container(
+      width: double.infinity,
+      height: isDesktop ? 350 : 250, 
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(imageUrl),
+          fit: BoxFit.cover,
+          alignment: Alignment.center,
+        ),
+      ),
+      child: Container(
+        color: Colors.black.withAlpha(102), // 102/255 ≈ 0.4
+        alignment: Alignment.center,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Text(
+            heroTitle, 
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: isDesktop ? 48 : 32,
+              fontWeight: FontWeight.w900,
+              shadows: [
+                Shadow(
+                  blurRadius: 12.0, 
+                  color: Colors.black.withAlpha(204), // 204/255 ≈ 0.8
+                  offset: const Offset(0, 4), 
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
+  // ====================================================================
+  // WIDGETS AUXILIARES (Sin cambios)
+  // ====================================================================
+
+  Widget _buildHeader(BuildContext context, Map<String, dynamic> translations, ColorScheme colorScheme) {
+    final subtitle = translations['research_intro_subtitle'] as String? ?? 'Profundizamos en los desafíos del sector minero y compartimos nuestras conclusiones.';
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+      constraints: const BoxConstraints(maxWidth: 900), 
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            subtitle,
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDesktopGrid(BuildContext context, List<dynamic> articles, ColorScheme colorScheme, String readMoreCta) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: articles.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, 
+        crossAxisSpacing: 30,
+        mainAxisSpacing: 30,
+        childAspectRatio: 1.6,
+      ),
+      itemBuilder: (context, index) {
+        final article = articles[index] as Map<String, dynamic>?;
+        if (article == null) return const SizedBox.shrink();
+
+        return _ResearchCard(
+          title: article['title'] as String? ?? 'Artículo Desconocido',
+          summary: article['summary'] as String? ?? 'Resumen no disponible.',
+          route: article['route'] as String? ?? '/research',
+          iconData: _getIconData(article['icon'] as String? ?? 'article'), 
+          colorScheme: colorScheme,
+          readMoreCta: readMoreCta,
+        );
+      },
+    );
+  }
+
+  Widget _buildMobileList(BuildContext context, List<dynamic> articles, ColorScheme colorScheme, String readMoreCta) {
+    return Column(
+      children: articles.map((article) {
+        final articleMap = article as Map<String, dynamic>?;
+        if (articleMap == null) return const SizedBox.shrink();
+        
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: _ResearchCard(
+            title: articleMap['title'] as String? ?? 'Artículo Desconocido',
+            summary: articleMap['summary'] as String? ?? 'Resumen no disponible.',
+            route: articleMap['route'] as String? ?? '/research',
+            iconData: _getIconData(articleMap['icon'] as String? ?? 'article'), 
+            colorScheme: colorScheme,
+            readMoreCta: readMoreCta,
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+// ====================================================================
+// WIDGET PRIVADO PARA LA TARJETA DE CADA ARTÍCULO (MODIFICADO)
+// ====================================================================
+class _ResearchCard extends StatelessWidget {
+  final String title;
+  final String summary;
+  final String route;
+  final IconData iconData;
+  final ColorScheme colorScheme;
+  final String readMoreCta;
+
+  const _ResearchCard({
+    required this.title,
+    required this.summary,
+    required this.route,
+    required this.iconData,
+    required this.colorScheme,
+    required this.readMoreCta,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        // NOTA: Se mantiene InkWell funcional para toda la tarjeta si la deseas
+        // mantener, aunque el botón de abajo estará deshabilitado.
+        onTap: () {
+          // if (context.mounted) context.go(route);
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Icon(
+                  iconData,
+                  size: 40, 
+                  color: colorScheme.secondary,
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.onSurface,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          summary,
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            height: 1.4,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: TextButton.icon(
+                        // 🚨 CAMBIO CLAVE: Se establece a null para deshabilitar el botón
+                        onPressed: null, 
+                        
+                        icon: const Icon(Icons.chevron_right),
+                        label: Text(readMoreCta),
+                        style: TextButton.styleFrom(
+                          // NOTA: Cuando onPressed es null, TextButton.icon toma un color 
+                          // deshabilitado por defecto (gris).
+                          foregroundColor: colorScheme.primary, 
+                          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,19 +1,28 @@
-// Archivo: lib/main.dart (Versión Final, Limpia y Estable)
+// Archivo: lib/main.dart (VERSIÓN FINAL CON RUTAS Y APPSTATE INYECTADO)
 
 import 'package:flutter/material.dart';
-import 'themetoggle.dart';
-import 'langtoggle.dart';
-import 'mainmenu.dart';
-import 'drawer.dart';
-import 'hero.dart';
-import 'logo_carousel.dart'; 
-import 'services_intro.dart'; 
-import 'research_section.dart'; 
-import 'contact_section.dart'; 
-import 'footer_section.dart'; // <--- IMPORTACIÓN RESTAURADA
+import 'package:flutter/foundation.dart';
+import 'package:go_router/go_router.dart'; 
+import 'package:flutter_web_plugins/flutter_web_plugins.dart'; 
 
+// ==========================================================
+// 1. Importaciones de Páginas y Shell
+// ==========================================================
+import 'pages/home_page.dart'; 
+import 'pages/about_page.dart'; 
+import 'pages/services_page.dart'; 
+import 'pages/contact_page.dart'; // 🚨 IMPORTACIÓN AÑADIDA
+import 'pages/research_page.dart'; // 🚨 IMPORTACIÓN AÑADIDA
+import 'app_shell.dart'; 
 
+// ==========================================================
+// PUNTO DE ENTRADA PRINCIPAL
+// ==========================================================
 void main() {
+  if (kIsWeb) {
+    // Usar la estrategia de URL con Hash (#) para compatibilidad con hosting estático
+    setUrlStrategy(const HashUrlStrategy());
+  }
   runApp(const IgenCoreApp());
 }
 
@@ -25,43 +34,112 @@ class IgenCoreApp extends StatefulWidget {
 }
 
 class _IgenCoreAppState extends State<IgenCoreApp> {
+  // Los ValueNotifier que serán inyectados globalmente
   late final ValueNotifier<ThemeMode> _themeMode;
   late final ValueNotifier<String> _language;
+  late final GoRouter _router; 
 
   @override
   void initState() {
     super.initState();
     _themeMode = ValueNotifier(ThemeMode.light);
     _language = ValueNotifier('ES');
+    
+    // DEFINICIÓN DEL ROUTER
+    _router = GoRouter(
+      initialLocation: '/',
+      routes: [
+        ShellRoute(
+          builder: (context, state, child) {
+            // AppState envuelve la AppShell e inyecta los ValueNotifier.
+            return AppState(
+              themeModeNotifier: _themeMode,
+              languageNotifier: _language,
+              // AppShell ya no necesita recibir los notifiers como argumentos
+              child: AppShell(
+                child: child,
+              ),
+            );
+          },
+          routes: [
+            // RUTA DE INICIO
+            GoRoute(
+              path: '/',
+              builder: (context, state) => const HomePage(), 
+            ),
+            // RUTA DE NOSOTROS
+            GoRoute(
+              path: '/about',
+              builder: (context, state) => const AboutPage(), 
+            ),
+            // RUTA DE SERVICIOS
+            GoRoute(
+              path: '/services',
+              builder: (context, state) => const ServicesPage(),
+              // Aseguramos la ruta para los detalles de servicios
+              routes: [
+                GoRoute(
+                  path: ':serviceId',
+                  builder: (context, state) => const ServicesPage(), // Usamos ServicesPage como fallback/base
+                ),
+              ],
+            ),
+            
+            // 🚨 RUTA AÑADIDA: INVESTIGACIÓN
+            GoRoute(
+              path: '/research',
+              builder: (context, state) => const ResearchPage(), 
+              routes: [
+                GoRoute(
+                  path: ':articleId', // Para URLs como /research/mineria-sostenible
+                  builder: (context, state) => const ResearchPage(), // Usamos ResearchPage como fallback/base
+                ),
+              ],
+            ),
+            
+            // 🚨 RUTA AÑADIDA: CONTACTO
+            GoRoute(
+              path: '/contact',
+              builder: (context, state) => const ContactPage(),
+            ),
+          ],
+        ),
+      ],
+    );
   }
-
+  
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final platformBrightness = MediaQuery.of(context).platformBrightness;
-    _themeMode.value = platformBrightness == Brightness.dark
-        ? ThemeMode.dark
-        : ThemeMode.light;
+    
+    // Sincroniza el modo oscuro del sistema solo si es necesario
+    final newMode = platformBrightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
+    if (_themeMode.value != newMode) {
+      _themeMode.value = newMode;
+    }
   }
   
   @override
   void dispose() {
     _themeMode.dispose();
     _language.dispose();
+    _router.dispose(); // Es buena práctica liberar el router
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
     const Color seedColor = Colors.deepOrange; 
+    
+    // ValueListenableBuilder solo escucha _themeMode para reconstruir MaterialApp
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: _themeMode,
-      builder: (context, themeMode, child) {
-        return MaterialApp(
+      builder: (context, themeMode, _) { 
+        return MaterialApp.router( 
           title: 'iGenCore',
-          // ==========================================================
-          // 1. CONFIGURACIÓN DEL TEMA CLARO (theme)
-          // ==========================================================
+          themeMode: themeMode,
           theme: ThemeData(
             useMaterial3: true,
             colorScheme: ColorScheme.fromSeed(
@@ -69,152 +147,16 @@ class _IgenCoreAppState extends State<IgenCoreApp> {
               brightness: Brightness.light,
             ),
           ),
-          // ==========================================================
-          // 2. CONFIGURACIÓN DEL TEMA OSCURO (darkTheme)
-          // ==========================================================
           darkTheme: ThemeData( 
             useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed( // <-- Creado a partir de la semilla
+            colorScheme: ColorScheme.fromSeed( 
               seedColor: seedColor,
               brightness: Brightness.dark,  
             ),
           ),
-
-          themeMode: themeMode,
-          home: HomePage(
-            themeModeNotifier: _themeMode,
-            languageNotifier: _language,
-          ),
+          routerConfig: _router, 
         );
       },
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  final ValueNotifier<ThemeMode> themeModeNotifier;
-  final ValueNotifier<String> languageNotifier;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  HomePage({
-    super.key,
-    required this.themeModeNotifier,
-    required this.languageNotifier,
-  });
-
-  // Función de navegación para el botón de Servicios (Usando debugPrint)
-  void _handleServicesTap(BuildContext context) {
-    debugPrint("Botón 'Servicios' presionado. ¡Implementa tu navegación!"); 
-  }
-  
-  // Función de navegación para el botón de Formulario de Contacto (Usando debugPrint)
-  void _handleFormTap(BuildContext context) {
-    debugPrint("Botón 'Formulario' de Contacto presionado.");
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final isDesktop = MediaQuery.of(context).size.width > 900;
-    
-    final isDarkMode = themeModeNotifier.value == ThemeMode.dark;
-    final logoPath = isDarkMode
-        ? 'assets/images/logoigenwhite.png'
-        : 'assets/images/logoigenblack.png';
-    
-    final logoWidget = Image.asset(
-      logoPath,
-      height: 24,
-    );
-    
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: isDesktop
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      ThemeToggle(themeModeNotifier: themeModeNotifier),
-                      const SizedBox(width: 8),
-                      logoWidget,
-                    ],
-                  ),
-                  MainMenu(
-                    languageNotifier: languageNotifier,
-                  ),
-                  LanguageToggle(languageNotifier: languageNotifier),
-                ],
-              )
-            : Row(
-                children: [
-                  ThemeToggle(themeModeNotifier: themeModeNotifier),
-                  const SizedBox(width: 8),
-                  logoWidget,
-                ],
-              ),
-        actions: isDesktop
-            ? null
-            : [
-                LanguageToggle(languageNotifier: languageNotifier),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openEndDrawer();
-                    },
-                  ),
-                ),
-              ],
-      ),
-      endDrawer: isDesktop
-          ? null
-          : CustomDrawer(
-              languageNotifier: languageNotifier,
-              logoWidget: logoWidget,
-              themeModeNotifier: themeModeNotifier,
-            ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              // 1. Sección Hero
-              HeroSection(languageNotifier: languageNotifier),
-              
-              // 2. Espacio de separación
-              const SizedBox(height: 36), 
-
-              // 3. Carousel de Logos
-              const LogoCarousel(),
-
-              // 4. Espacio antes de la próxima sección
-              const SizedBox(height: 36),
-              
-              // 5. INTRODUCCIÓN DE SERVICIOS
-              ServicesIntroSection(
-                languageNotifier: languageNotifier,
-                onServicesTap: () => _handleServicesTap(context), 
-              ),
-
-              // 6. NUEVA SECCIÓN: INVESTIGACIÓN
-              ResearchSection(languageNotifier: languageNotifier), 
-              
-              // 7. Espacio
-              const SizedBox(height: 48),
-
-              // 8. NUEVA SECCIÓN: CONTÁCTANOS
-              ContactSection(
-                languageNotifier: languageNotifier,
-                onFormTap: () => _handleFormTap(context), 
-              ),
-              
-              // 9. PIE DE PÁGINA (FOOTER)
-              FooterSection(languageNotifier: languageNotifier), // <--- WIDGET FOOTER RESTAURADO
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

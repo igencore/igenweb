@@ -1,10 +1,9 @@
-// Archivo: lib/research_section.dart
+// Archivo: lib/research_section.dart (COMPLETO: RECIBE TRADUCCIONES Y NAVEGA)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; 
-import 'dart:async'; // Necesario para el slider
-
-import 'translations.dart'; 
+import 'dart:async'; 
+import 'package:go_router/go_router.dart'; // 🚨 AÑADIDO: Necesario para context.go()
 
 // Las imágenes de ejemplo deben estar en assets/images/research
 const List<String> researchImages = [
@@ -14,154 +13,149 @@ const List<String> researchImages = [
 ];
 
 class ResearchSection extends StatelessWidget {
-  final ValueNotifier<String> languageNotifier;
+  // Ya recibe el mapa de traducciones correctamente.
+  final Map<String, dynamic> translations;
 
   const ResearchSection({
-    super.key, 
-    required this.languageNotifier,
+    super.key,
+    required this.translations,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Definición de colores para la card de "jerarquía inferior"
+    // Usamos el mapa de traducciones directamente.
+    final researchText = translations; 
+
+    final isDesktop = MediaQuery.of(context).size.width > 900;
+    final double verticalPadding = isDesktop ? 48.0 : 24.0;
+    final double innerPadding = isDesktop ? 36.0 : 20.0;
     final colorScheme = Theme.of(context).colorScheme;
-   // final isDarkMode = colorScheme.brightness == Brightness.dark;
 
-    // Colores basados en el esquema monocromático
-   // final cardBorderColor = isDarkMode ? Colors.white54 : Colors.black54;
-   // final cardBackgroundColor = colorScheme.surfaceContainerLow; 
+    // TÍTULOS Y SUBTÍTULOS USANDO EL MAPA RECIBIDO
+    final mainTitle = researchText['research_main_title'] as String? ?? 'Investigación para la minería del mañana';
+    final mainSubtitle = researchText['research_main_subtitle'] as String? ?? 'Conoce nuestra participación en el desarrollo tecnológico del futuro.';
 
-    return ValueListenableBuilder<String>(
-      valueListenable: languageNotifier,
-      builder: (context, language, _) {
-        final researchText = appTranslations[language]!;
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 48.0, horizontal: 16.0),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1200),
-              child: Container(
-                decoration: BoxDecoration(
-                 // color: cardBackgroundColor,
-                  borderRadius: BorderRadius.circular(12),
-                   border: Border.all(
-                    color: colorScheme.primary,
-                    width: 1.0, 
-                  ), 
-                
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: verticalPadding, 
+        horizontal: 16.0,
+      ),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+               border: Border.all(
+                color: colorScheme.primary,
+                width: 1.0, 
+              ), 
+            ),
+            padding: EdgeInsets.all(innerPadding),
+            child: Column(
+              children: [
+                // Título principal de la sección
+                Text(
+                  mainTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
-                padding: const EdgeInsets.all(36.0),
-                child: Column(
-                  children: [
-                    // Título principal de la sección
-                    Text(
-                      researchText['research_main_title'] ?? 'Investigación para la minería del mañana',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      researchText['research_main_subtitle'] ?? 'Conoce nuestra participación en el desarrollo tecnológico del futuro.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-
-                    // Contenido dividido en dos columnas (FadeSlider y Texto)
-                    _ResearchContent(
-                      languageNotifier: languageNotifier,
-                      colorScheme: colorScheme,
-                    ),
-                  ],
+                const SizedBox(height: 16),
+                Text(
+                  mainSubtitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 48),
+
+                // Contenido dividido en dos columnas
+                _ResearchContent(
+                  researchText: researchText, 
+                  colorScheme: colorScheme,
+                ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
 
 // Widget interno que contiene las dos columnas y maneja la adaptación
 class _ResearchContent extends StatelessWidget {
-  final ValueNotifier<String> languageNotifier;
+  final Map<String, dynamic> researchText; 
   final ColorScheme colorScheme;
 
   const _ResearchContent({
-    required this.languageNotifier,
+    required this.researchText,
     required this.colorScheme,
   });
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 900;
-    
+          
+    // Títulos y textos usando el mapa recibido
+    final contentTitle = researchText['research_content_title'] as String? ?? 'Liderando la innovación en Minería 4.0';
+    final contentBody = researchText['research_content_body'] as String? ?? 'Nuestro equipo se enfoca en la investigación de nuevos materiales, optimización de procesos y desarrollo de algoritmos de IA para mejorar la seguridad y la productividad de la minería a gran escala, con un enfoque en la sostenibilidad y el impacto ambiental.';
+    final contentButton = researchText['research_content_button'] as String? ?? 'Ver Proyectos';
+
+
     // Contenido del texto
     final textContent = Padding(
       padding: EdgeInsets.symmetric(horizontal: isDesktop ? 32.0 : 0.0),
-      child: ValueListenableBuilder<String>(
-        valueListenable: languageNotifier,
-        builder: (context, language, _) {
-          final researchText = appTranslations[language]!;
-          
-          // Color de acento monocromático: onSurface con opacidad
-      //    final monochromeAccent = colorScheme.onSurface.withAlpha(128);
-          
-          return Column(
-            crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Título (secundario)
-              Text(
-                researchText['research_content_title'] ?? 'Liderando la innovación en Minería 4.0',
-                textAlign: isDesktop ? TextAlign.left : TextAlign.center,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.secondary, 
-                ),
-              ),
-              const SizedBox(height: 16),
-              // Párrafo
-              Text(
-                researchText['research_content_body'] ?? 'Nuestro equipo se enfoca en la investigación de nuevos materiales, optimización de procesos y desarrollo de algoritmos de IA para mejorar la seguridad y la productividad de la minería a gran escala, con un enfoque en la sostenibilidad y el impacto ambiental.',
-                textAlign: isDesktop ? TextAlign.left : TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: colorScheme.onSurface,
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 24),
-              // Botón de acción (ejemplo)
-              OutlinedButton(
-                onPressed: () {
-                  debugPrint("Botón 'Ver Proyectos' presionado.");
-                  // Aquí iría la navegación
-                },
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  side: BorderSide(color: colorScheme.primary, width: 2),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                 // foregroundColor: monochromeAccent,
-                ),
-                child: Text(
-                  researchText['research_content_button'] ?? 'Ver Proyectos',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          );
-        },
+      child: Column(
+        crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Título (secundario)
+          Text(
+            contentTitle,
+            textAlign: isDesktop ? TextAlign.left : TextAlign.center,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: colorScheme.secondary, 
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Párrafo
+          Text(
+            contentBody,
+            textAlign: isDesktop ? TextAlign.left : TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              color: colorScheme.onSurface,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Botón de acción (ejemplo)
+          OutlinedButton(
+            onPressed: () {
+              // 🚨 CORRECCIÓN FINAL: Implementación de la navegación del botón
+              context.go('/research'); 
+              debugPrint("Botón 'Ver Proyectos' presionado. Navegando a /research.");
+            },
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              side: BorderSide(color: colorScheme.primary, width: 2),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
+            child: Text(
+              contentButton,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
     );
 
@@ -171,17 +165,16 @@ class _ResearchContent extends StatelessWidget {
       colorScheme: colorScheme,
     );
 
-    // Invertir el orden: Slider primero, Texto después
+    // Lógica de Desktop/Mobile
     if (isDesktop) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(flex: 5, child: sliderContent), // Izquierda (Imágenes)
-          Expanded(flex: 5, child: textContent),   // Derecha (Texto)
+          Expanded(flex: 5, child: sliderContent), 
+          Expanded(flex: 5, child: textContent),   
         ],
       );
     } else {
-      // Orden apilado para móvil
       return Column(
         children: [
           sliderContent,
@@ -193,11 +186,11 @@ class _ResearchContent extends StatelessWidget {
   }
 }
 
-// === WIDGET PARA LA ANIMACIÓN FADE IN / FADE OUT (Corregido: Transición Seamless y Duración) ===
+// 🚨 FadeSliderCard se mantiene como HookWidget porque usa hooks y dart:async.
 class FadeSliderCard extends HookWidget {
   final List<String> images;
   final ColorScheme colorScheme;
-
+  
   const FadeSliderCard({
     super.key,
     required this.images,
@@ -206,6 +199,7 @@ class FadeSliderCard extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ... (El resto del código de FadeSliderCard se mantiene sin cambios)
     if (images.isEmpty) {
       return AspectRatio(
         aspectRatio: 16 / 9,
@@ -223,7 +217,6 @@ class FadeSliderCard extends HookWidget {
     useEffect(() {
       fadeController.forward(from: 0.0);
       
-      // === CAMBIO CLAVE: Duración total del slide ajustada a 3 segundos ===
       final totalSlideDuration = const Duration(seconds: 3); 
       
       Timer? slideTimer;
@@ -231,9 +224,7 @@ class FadeSliderCard extends HookWidget {
       void startNextSlide() {
         slideTimer?.cancel(); 
         
-        // Configuramos el nuevo timer
         slideTimer = Timer(totalSlideDuration, () {
-          // Bloqueo de seguridad para evitar usar ValueNotifier después de dispose
           if (!context.mounted) {
              return;
           }
@@ -249,7 +240,6 @@ class FadeSliderCard extends HookWidget {
       
       startNextSlide();
 
-      // FUNCIÓN DE LIMPIEZA: esencial para evitar el error de ValueNotifier
       return () {
         slideTimer?.cancel();
       };
@@ -266,7 +256,6 @@ class FadeSliderCard extends HookWidget {
         aspectRatio: 16 / 9,
         child: Stack(
           children: [
-            // 1. IMAGEN ANTERIOR (Base, permanece visible sin animación de opacidad)
             Image.asset(
               images[previousImageIndex.value],
               fit: BoxFit.cover,
@@ -276,7 +265,6 @@ class FadeSliderCard extends HookWidget {
               errorBuilder: (context, error, stackTrace) => Container(color: colorScheme.surfaceContainerHighest),
             ),
             
-            // 2. IMAGEN ACTUAL (Animación de opacidad 0.0 -> 1.0, se funde encima)
             AnimatedBuilder(
               animation: animation,
               builder: (context, child) {
