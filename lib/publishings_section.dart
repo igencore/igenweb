@@ -1,4 +1,4 @@
-// Archivo: lib/publishings_section.dart (TÍTULO PRINCIPAL CON MAYOR CONTRASTE)
+// Archivo: lib/publishings_section.dart (TÍTULOS CON COLORES FIJOS DE ALTO CONTRASTE)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; 
@@ -57,8 +57,8 @@ class PublishingsSection extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    // 🚨 CAMBIO CLAVE: Usamos colorScheme.primary para el acento y contraste
-                    color: colorScheme.primary,
+                    // 🚨 CAMBIO 1: Color fijo a BLANCO (Colors.white)
+                    color: Colors.white, 
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -88,7 +88,6 @@ class PublishingsSection extends StatelessWidget {
 
 // Widget interno que contiene las dos columnas y maneja la adaptación
 class _PublishingsContent extends StatelessWidget {
-// ... (código interno _PublishingsContent y FadeSliderCard sin cambios)
   final Map<String, dynamic> publishingsText; 
   final ColorScheme colorScheme;
 
@@ -119,7 +118,8 @@ class _PublishingsContent extends StatelessWidget {
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: colorScheme.secondary, 
+              // 🚨 CAMBIO 2: Color fijo a AMARILLO brillante (Colors.amber)
+              color: Colors.amber, 
             ),
           ),
           const SizedBox(height: 16),
