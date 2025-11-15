@@ -1,4 +1,4 @@
-// Archivo: lib/components/footer_section.dart (FINAL: TRADUCCIÓN REACTIVA)
+// Archivo: lib/components/footer_section.dart (FINAL: FOOTER RESPONSIVO)
 
 import 'package:flutter/material.dart';
 import '../translations.dart'; 
@@ -18,6 +18,11 @@ class FooterSection extends StatelessWidget {
       valueListenable: languageNotifier,
       builder: (context, language, child) {
         
+        // --- DETECCIÓN DE PANTALLA ---
+        final screenWidth = MediaQuery.of(context).size.width;
+        // Usamos un breakpoint estándar (e.g., 700px)
+        final bool isDesktop = screenWidth > 700; 
+        
         // Obtenemos las traducciones basadas en el idioma actual
         final translations = appTranslations[language] as Map<String, dynamic>? ?? {}; 
         
@@ -29,9 +34,9 @@ class FooterSection extends StatelessWidget {
         final Color backgroundColor = colorScheme.surfaceContainerLow; 
         
         // 2. Color de Texto/Contenido
-        final Color contentColor = colorScheme.onSurfaceVariant; // Usamos un color secundario para el footer
+        final Color contentColor = colorScheme.onSurfaceVariant; 
         
-        const double footerHeight = 80.0; 
+        // const double footerHeight = 80.0; // 🚨 ELIMINADO: La altura será dinámica
         const double contentMaxWidth = 1200.0;
         
         // Estilo base de texto
@@ -40,53 +45,69 @@ class FooterSection extends StatelessWidget {
           color: contentColor,
         );
         
+        // === ELEMENTOS ===
+        // 1. Copyright Text
+        final copyrightWidget = Text(
+          '$copyrightText - 2025 iGenCore', 
+          textAlign: TextAlign.center, // Centrado para móvil
+          style: textStyle.copyWith(color: contentColor.withAlpha(128)),
+        );
+
+        // 2. Legal Notice Button
+        final legalNoticeButton = TextButton(
+          onPressed: () {
+            // Lógica de navegación del aviso legal
+            debugPrint("Navegando a Aviso Legal...");
+          },
+          style: TextButton.styleFrom(
+            backgroundColor: colorScheme.surfaceContainerHigh.withAlpha(80), 
+            foregroundColor: contentColor, 
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            minimumSize: Size.zero, 
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: Text(
+            legalNoticeText, 
+            style: textStyle.copyWith(
+              fontWeight: FontWeight.bold,
+              color: contentColor, 
+            ),
+          ),
+        );
+        // === FIN ELEMENTOS ===
+
         return Container(
           width: double.infinity, 
-          height: footerHeight,
+          // 🚨 ELIMINAMOS la altura fija y usamos padding para el espacio vertical
           color: backgroundColor, 
-          padding: const EdgeInsets.symmetric(horizontal: 24.0), 
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0), // Agregado padding vertical
           
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: contentMaxWidth),
               
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // 1. Elemento Izquierdo: Copyright (Traducción + año)
-                  Text(
-                    '$copyrightText - 2025 iGenCore', 
-                    style: textStyle.copyWith(color: contentColor.withAlpha(128)),
-                  ), 
-
-                  // 2. Elemento Derecho: Aviso Legal (Botón con fondo suave)
-                  TextButton(
-                    onPressed: () {
-                      // Lógica de navegación del aviso legal
-                      debugPrint("Navegando a Aviso Legal...");
-                    },
-                    style: TextButton.styleFrom(
-                      // Usamos un color que se vea en el fondo surfaceContainerLow
-                      backgroundColor: colorScheme.surfaceContainerHigh.withAlpha(80), 
-                      foregroundColor: contentColor, 
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      minimumSize: Size.zero, 
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              // 🚨 CAMBIO CLAVE: Layout Responsivo
+              child: isDesktop
+                  ? Row( // DESKTOP: Lado a lado, justificado al espacio
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        copyrightWidget,
+                        legalNoticeButton,
+                      ],
+                    )
+                  : Column( // MÓVIL: Apilados y centrados
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        copyrightWidget,
+                        const SizedBox(height: 10), // Espacio entre elementos
+                        legalNoticeButton,
+                      ],
                     ),
-                    child: Text(
-                      legalNoticeText, 
-                      style: textStyle.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: contentColor, 
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
         );

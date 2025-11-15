@@ -1,4 +1,4 @@
-// Archivo: lib/components/relief_point_cloud_animation.dart
+// Archivo: lib/components/relief_point_cloud_animation.dart (FINAL: CON PAUSA POR SCROLL)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; 
@@ -10,8 +10,14 @@ import 'dart:ui';
 // ====================================================================
 class ReliefPointCloudAnimation extends HookWidget {
   final ValueNotifier<ThemeMode> themeModeNotifier; 
+  // 🚨 NUEVO: Notificador para pausar/reanudar la animación
+  final ValueNotifier<bool>? isPausedNotifier; 
 
-  const ReliefPointCloudAnimation({super.key, required this.themeModeNotifier});
+  const ReliefPointCloudAnimation({
+    super.key, 
+    required this.themeModeNotifier,
+    this.isPausedNotifier, // Hacemos opcional para la compatibilidad
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +25,39 @@ class ReliefPointCloudAnimation extends HookWidget {
     final rotationController = useAnimationController(
       duration: const Duration(seconds: 40), 
     )..repeat(reverse: false); 
+    
+    // 🚨 IMPLEMENTACIÓN DEL LISTENER DE PAUSA/REANUDACIÓN
+    useEffect(() {
+      if (isPausedNotifier != null) {
+        
+        void listener() {
+          if (isPausedNotifier!.value) {
+            // Valor TRUE: La animación debe pausarse
+            if (rotationController.isAnimating) {
+              rotationController.stop();
+            }
+          } else {
+            // Valor FALSE: La animación debe reanudarse
+            if (!rotationController.isAnimating) {
+              rotationController.repeat(reverse: false);
+            }
+          }
+        }
+
+        // 1. Ejecutar el listener inmediatamente para el estado inicial
+        listener(); 
+        
+        // 2. Agregar el listener al notificador
+        isPausedNotifier!.addListener(listener);
+        
+        // 3. Función de limpieza (se ejecuta cuando el widget es desechado o las dependencias cambian)
+        return () {
+          isPausedNotifier!.removeListener(listener);
+        };
+      }
+      return null; // No hay cleanup si no hay notificador
+    }, [rotationController, isPausedNotifier]); // Dependencias: el controlador y el notificador (Hooks)
+    
 
     // Colores basados en el tema actual
     final baseColor = Theme.of(context).colorScheme.onSurface;

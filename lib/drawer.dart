@@ -1,4 +1,4 @@
-// Archivo: lib/drawer.dart (FINAL CON SERVICIOS Y ARTÍCULOS DINÁMICOS)
+// Archivo: lib/drawer.dart (FINAL CON LOGO AGRANDADO)
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -81,6 +81,10 @@ class CustomDrawer extends StatelessWidget {
       color: Theme.of(context).colorScheme.onSurface,
     );
     
+    // 🚨 DEFINICIÓN DEL TAMAÑO AGRANDADO
+    const double originalHeight = 20.0;
+    const double logoScaleFactor = 2.0; // 200% del tamaño original
+
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeModeNotifier,
       builder: (context, themeMode, child) {
@@ -89,7 +93,8 @@ class CustomDrawer extends StatelessWidget {
 
         final drawerLogoWidget = Image(
           image: logoPath,
-          height: 20, 
+          // 🚨 APLICAMOS EL NUEVO TAMAÑO: 20 * 2.0 = 40.0
+          height: originalHeight * logoScaleFactor, 
         );
         
         final isDarkMode = themeMode == ThemeMode.dark;
@@ -148,8 +153,8 @@ class CustomDrawer extends StatelessWidget {
                   // 4. RESEARCH (DINÁMICO)
                   _buildDrawerExpansionTile(
                     context, 
-                    menuItems['research'] as String? ?? 'Investigación', 
-                    '/research', 
+                    menuItems['publishings'] as String? ?? 'Publicaciones', 
+                    '/publishings', 
                     researchSubItems, 
                     menuTextStyle,
                   ),

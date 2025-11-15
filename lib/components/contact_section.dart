@@ -246,7 +246,7 @@ class _ContactGrid extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 1.0, 
+          childAspectRatio: 0.8, 
           crossAxisSpacing: 16.0,
           mainAxisSpacing: 12.0, 
         ),
@@ -326,4 +326,4 @@ class _ContactCard extends StatelessWidget {
       ),
     );
   }
-}
+} 

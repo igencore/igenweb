@@ -1,9 +1,9 @@
-// Archivo: lib/translations.dart (EXPANDIDO CON CLAVES DE SECCIÓN DE TARJETAS, RESEARCH SECTION Y FOOTER)
+// Archivo: lib/translations.dart (ORGANIZADO POR SECCIÓN Y ACTUALIZADO A PUBLICACIONES)
 
 final Map<String, dynamic> appTranslations = {
   'EN': {
     // ==========================================================
-    // CLAVES DE NAVEGACIÓN Y TÍTULOS
+    // 1. CLAVES DE NAVEGACIÓN Y MENÚ (HEADER)
     // ==========================================================
     'home': 'Home',
     'about_us': 'About Us',
@@ -11,20 +11,41 @@ final Map<String, dynamic> appTranslations = {
     'our_team': 'Our Team',
     'our_trajectory': 'Our Trajectory', 
     'services': 'Services',
-    'research': 'Research',
+    'publications': 'Publications', 
     'contact': 'Contact',
     
-    // SERVICES INTRO SECTION
-    'services_intro_title': 'Our Comprehensive Solutions', 
-    'services_intro_subtitle': 'Advanced engineering and industrial technology to maximize mining efficiency.', 
-    'contact_us_cta': 'View Services', 
-    
-    // HERO SECTION (Añadidas claves por si faltaban)
+    // ==========================================================
+    // 2. HERO SECTION (HOME PAGE)
+    // ==========================================================
     'hero_title': 'Mining Operational Excellence',
     'hero_subtitle': 'Driving efficiency and sustainability in every process.',
     'hero_button_text': 'Discover Our Work',
 
-    // CONTACT SECTION
+    // ==========================================================
+    // 3. SERVICES INTRO SECTION (HOME PAGE)
+    // ==========================================================
+    'services_intro_title': 'Our Comprehensive Solutions', 
+    'services_intro_subtitle': 'Advanced engineering and industrial technology to maximize mining efficiency.', 
+    'contact_us_cta': 'View Services', 
+
+    // ==========================================================
+    // 4. PUBLISHINGS INTRO SECTION (HOME PAGE) - Usa PublishingsSection
+    // ==========================================================
+    'publishings_main_title': 'Publications for the Mining of Tomorrow', // Texto ajustado para inglés
+    'publishings_main_subtitle': 'Learn about our participation in the technological development of the future.',
+    'publishings_content_title': 'Leading Innovation in Mining 4.0',
+    'publishings_content_body': 'Our team focuses on the research of new materials, process optimization, and development of AI algorithms to improve the safety and productivity of large-scale mining, with an emphasis on sustainability and environmental impact.',
+    'publishings_content_button': 'View Publications', // 🚨 Corregido el texto del botón para la sección principal
+
+    // ==========================================================
+    // 5. FOOTER SECTION
+    // ==========================================================
+    'footer_copyright': 'All rights reserved',
+    'footer_legal_notice': 'Legal Notice',
+
+    // ==========================================================
+    // 6. CONTACT SECTION
+    // ==========================================================
     'contact_title': 'Let\'s Discuss Your Project',
     'contact_subtitle': 'We are ready to talk about your next mining project. Choose your preferred channel.',
     'contact_cards_title': 'Contact Channels',
@@ -35,144 +56,144 @@ final Map<String, dynamic> appTranslations = {
     'contact_card_form_title': 'Direct Message Form',
     'contact_card_form_button': 'Send Message',
     
-    // NUEVAS CLAVES DE FORMULARIO DE CONTACTO
+    // Claves de Formulario
     'form_name_label': 'Your Name',
     'form_email_label': 'Your Email',
     'form_message_label': 'Your Message',
     'form_submit_cta': 'Send Request',
     
     // ==========================================================
-    // FOOTER SECTION 🚨 CLAVES AÑADIDAS
-    // ==========================================================
-    'footer_copyright': 'All rights reserved',
-    'footer_legal_notice': 'Legal Notice',
-
-    // ==========================================================
-    // ESTRUCTURA DE INVESTIGACIÓN (RESEARCH SECTION HOME)
-    // ==========================================================
-    'research_main_title': 'Research for the Mining of Tomorrow',
-    'research_main_subtitle': 'Learn about our participation in the technological development of the future.',
-    'research_content_title': 'Leading Innovation in Mining 4.0',
-    'research_content_body': 'Our team focuses on the research of new materials, process optimization, and development of AI algorithms to improve the safety and productivity of large-scale mining, with an emphasis on sustainability and environmental impact.',
-    'research_content_button': 'View Projects',
-
-    // ==========================================================
-    // ESTRUCTURA DE SERVICIOS (9 Tarjetas de Valor Comercial)
+    // 7. ESTRUCTURA DE SERVICIOS (FLAT - CON ID y TEXTOS COMPLETOS)
+    // 🚨 MODIFICADO: Estructura plana con textos completos y ID de subcategoría
     // ==========================================================
     'services_data': [
       // 1. Geometallurgy (Principal)
       {
-        'title': 'Strategic Geometallurgy and Process Optimization',
+        'id': '1',
+        'title': 'Geometallurgy',
         'route': '/services/geometalurgia', 
         'icon': 'precision_manufacturing',
-        'summary': 'Comprehensive research and evaluation to maximize mineral and water recovery while drastically reducing operational risks and costs.',
+        'summary': 'Research and evaluation services for the various procedures and components involved in mineral processing that allow the optimization of operations, thereby maximizing the recovery of both valuable minerals and water resources, while reducing operational risks.',
       },
       // 1a. Sub: Flotation Research
       {
-        'title': 'Advanced Flotation Optimization',
+        'id': '1a',
+        'title': 'Flotation Research Service',
         'route': '/services/geometalurgia/flotacion',
-        'icon': 'insights', // Icono: Insights/Analytics
-        'summary': 'We install specialized sensors for simultaneous measurement of gas flow and froth height, creating precise operational baselines for maximum metallurgical efficiency.',
+        'icon': 'insights', 
+        'summary': 'Optimizing the metallurgical performance of flotation cells requires finding air flow profiles and froth heights within the bank that are compatible with the necessary conditions for the circulation of the feed volumetric flow. Air dispersion is the most important process occurring in flotation machines. Therefore, we perform simultaneous and continuous measurement of gas flow, apparent density of pulp, and froth height, in addition to frequent spot measurements of pulp density, gas content, and bubble size in all cells within a bank. These measurements are carried out using sensors specifically developed for characterizing the operation of cells that process mineral slurries. The results obtained allow us to create operational baselines for cell banks in the flotation circuit, which in turn allow the cell to perform at its highest operating point.',
       },
       // 1b. Sub: Clay Modeling
       {
-        'title': 'Clay Modeling and Viscosity Control',
+        'id': '1b',
+        'title': 'Clay minerals modeling and analysis',
         'route': '/services/geometalurgia/arcillas',
-        'icon': 'texture', // Icono: Texture/Surface
-        'summary': 'High-precision mineralogical examination to determine clay types, offering solutions that significantly reduce acid consumption, viscosity, and operational costs.',
+        'icon': 'texture', 
+        'summary': 'The presence of clays can have negative effects when concentrating copper ores. Therefore, in comminution, their presence decreases crushing and grinding efficiency due to increased viscosity. In flotation, the recovery and concentrate grade are reduced due to the reduced floatability of the copper ores. Moreover, in leaching, they cause the formation of agglomerates and increase pulp viscosity, which negatively impacts copper recovery and generates greater sulfuric acid consumption. Through high-precision mineralogical examination, we can determine the types of mineral clays present and, based on this, analyze and recommend solutions that primarily reduce operating costs. We also perform clay control modeling to prevent operational disasters.',
       },
       // 1c. Sub: Reagents
       {
-        'title': 'Reagent Analysis and Supply Chain Optimization',
+        'id': '1c',
+        'title': 'Reagent Analysis',
         'route': '/services/geometalurgia/reactivos',
-        'icon': 'science', // Icono: Science/Test Tube
-        'summary': 'Detailed studies on flocculants and foaming agents to fine-tune thickening, flotation, and ensure optimal recovery of water resources.',
+        'icon': 'science', 
+        'summary': 'In the reagent area, we conduct tests and studies on flocculants and foaming agents to optimize the operation processes of thickening, flotation, and water recovery.',
       },
       
       // 2. FLUID TRANSPORTATION (Principal)
       {
-        'title': 'High-Efficiency Pumping Systems and Fluid Transport',
+        'id': '2',
+        'title': 'Fluid Transportation',
         'route': '/services/transporte_fluidos', 
         'icon': 'waves_outlined',
-        'summary': 'Supply, commissioning, and continuous monitoring of a wide range of high-quality pumping equipment, complete with a strategic spare parts stock for assured continuity.',
+        'summary': 'Fluid handling through different kinds of pumps: we maintain high manufacturing standards, offering a wide range of pumping equipment, in any material and for any type of application that clients may require. Once the asset is delivered, we ensure it operates in perfect condition, advising on its commissioning, maintaining a supervision service with condition monitoring technology, and keeping a stock of spare parts available if necessary. For more information about our catalog, contact us.',
       },
       
       // 3. METAL-MECHANIC (Principal)
       {
-        'title': 'Precision Metal-Mechanics and Critical Part Manufacturing',
+        'id': '3',
+        'title': 'Metal parts scanning',
         'route': '/services/metalmecanica', 
         'icon': 'handyman_outlined',
-        'summary': 'Digital scanning and manufacturing of any critical metal part. We optimize alloys and ensure the highest quality casting to guarantee superior durability and operational continuity.',
+        'summary': 'We scan any critical metal part for subsequent manufacturing without the need for any modifications, thus ensuring operational continuity. If necessary, we optimize metal alloys to improve the part\'s durability. We ensure that the casting and machining process meet the highest quality standards.',
       },
 
       // 4. PROCESS AUTOMATION (Principal)
       {
-        'title': 'Advanced Industrial Automation and Efficiency',
+        'id': '4',
+        'title': 'Process Automation',
         'route': '/services/automatizacion', 
         'icon': 'memory_outlined',
-        'summary': 'Implement technology to replace hazardous manual tasks, optimizing overall plant efficiency, minimizing errors, and achieving significant time and cost savings.',
+        'summary': 'We offer technology to perform tasks that were previously performed manually, with the goal of optimizing efficiency, reducing errors, and saving time and operational costs.',
       },
       
       // 4a. Sub: Automatic Lubrication
       {
-        'title': 'Automatic Lubrication Systems (German Technology)',
+        'id': '4a',
+        'title': 'Automatic Lubrication',
         'route': '/services/automatizacion/lubricacion',
-        'icon': 'settings_suggest', // Icono: Settings/Suggest
-        'summary': 'Devices for hard-to-reach or hazardous points, extending equipment life, reducing downtime due to wear, and optimizing safety and lubricant consumption.',
+        'icon': 'settings_suggest', 
+        'summary': 'In mining, many lubrication points are difficult to reach or located in hazardous environments. Therefore, we offer automatic lubricators for a range of different applications. From electromechanical and electrochemical devices to devices with multiple lubrication lines. Automatic lubricators with German technology enable greater time savings, less machine downtime due to wear, lower lubricant consumption, longer service life, lubricant discharge based on operational needs, and a lower risk of contamination and impurities. This optimizes work safety and facilitates control and monitoring. For more information about our catalog, contact us.',
       },
       
       // 4b. Sub: Remote Monitoring (Wear Prediction) and Pigging
       {
-        'title': 'Patented Remote Wear Prediction and Pigging',
+        'id': '4b',
+        'title': 'Monitoring Technology',
         'route': '/services/automatizacion/monitoreo',
-        'icon': 'leak_add', // Icono: Leak/Pipeline
-        'summary': 'Real-time wear data management for mill/chute liners (no cables/external power). Includes Pigging Stations for safe, high-pressure pipeline inspection and maintenance.',
+        'icon': 'leak_add', 
+        'summary': 'Remote mill and chute liner wear prediction. This technology collects and manages real-time wear data to optimize and reduce liner wear in future processing lines, thereby saving operational costs. This patented technology monitors the asset while it is operating without the need for external power or cables. Pigging stations inspect, clean, and maintain pipelines, and facilitate the simultaneous flow of multiple products. They reduce operational risks and facilitate maintenance while becoming a reliable and safe option for pipeline managing. For more information about our technologies, contact us.',
       },
-      
+
+      // 4c. Sub: Fluid Circuit Design
+      {
+        'id': '4c',
+        'title': 'Fluid Circuit Design and Manufacturing',
+        'route': '/services/automatizacion/diseno-fluidos',
+        'icon': 'waves_outlined', 
+        'summary': 'Given the need to facilitate cleaning operations at the concentration plant, we design and build automated circuits for flocculant plants for emergency tailings and molybdenum plants.',
+      },
     ],
 
     // ==========================================================
-    // ESTRUCTURA DE INVESTIGACIÓN (RESEARCH PAGE)
+    // 8. ESTRUCTURA DE PUBLICACIONES (PUBLISHINGS PAGE)
     // ==========================================================
-    'research_intro_title': 'Scientific Research and Mining Insights',
-    'research_intro_subtitle': 'We deepen the challenges of the mining sector and share our data-driven conclusions.',
-    'research_read_more_cta': 'Read Full Article',
+    'publishings_intro_title': 'Scientific Publications and Mining Insights',
+    'publishings_intro_subtitle': 'We deepen the challenges of the mining sector and share our data-driven conclusions.',
+    'publishings_read_more_cta': 'Read Full Article',
     
-    // Claves para el menú (MANTENIDAS)
-    'research_1': 'Sustainable Mining',
-    'research_2': 'AI in Flotation',
-    'research_3': 'Tailings Management',
+    // 🚨 CLAVES DE MENÚ ANTIGUAS ELIMINADAS (research_1, research_2, research_3)
 
-    'research_data': [
+    'publishings_data': [
       {
         'title': 'Sustainable Mining Practices for Arid Regions',
         'summary': 'A comparative study on water recirculation techniques in the Atacama Desert, focusing on maximizing efficiency with minimal environmental impact.',
-        'route': '/research/sustainable-mining',
+        'route': '/publishings/sustainable-mining', 
         'icon': 'insights',
       },
       {
         'title': 'The Role of Artificial Intelligence in Flotation Efficiency',
         'summary': 'Research detailing the application of neural networks to predict and adjust flotation parameters in real-time, significantly reducing reagent usage.',
-        'route': '/research/ai-flotation',
+        'route': '/publishings/ai-flotation', 
         'icon': 'psychology',
       },
       {
         'title': 'Innovative Techniques for Dry Tailings Management',
         'summary': 'Analysis of new technologies for the stable and safe confinement of mining waste, emphasizing geotechnical stability and water recovery.',
-        'route': '/research/tailings-management',
+        'route': '/publishings/tailings-management', 
         'icon': 'science',
       },
       {
         'title': 'Optimizing Energy Consumption in Crushing Plants',
         'summary': 'Evaluation of energy efficiency in primary crushing circuits using advanced dynamic simulation models.',
-        'route': '/research/energy-crushing',
+        'route': '/publishings/energy-crushing', 
         'icon': 'memory_outlined',
       },
     ],
   },
   'ES': {
     // ==========================================================
-    // CLAVES DE NAVEGACIÓN Y TÍTULOS
+    // 1. CLAVES DE NAVEGACIÓN Y MENÚ (HEADER)
     // ==========================================================
     'home': 'Inicio',
     'about_us': 'Nosotros',
@@ -180,20 +201,41 @@ final Map<String, dynamic> appTranslations = {
     'our_team': 'Nuestro Equipo',
     'our_trajectory': 'Trayectoria y Logros', 
     'services': 'Servicios',
-    'research': 'Investigación',
+    'publishings': 'Publicaciones',
     'contact': 'Contacto',
     
-    // SERVICES INTRO SECTION
-    'services_intro_title': 'Nuestras Soluciones Integrales', 
-    'services_intro_subtitle': 'Ingeniería avanzada y tecnología industrial para maximizar la eficiencia en minería.', 
-    'contact_us_cta': 'Ver Servicios', 
-
-    // HERO SECTION
+    // ==========================================================
+    // 2. HERO SECTION (HOME PAGE)
+    // ==========================================================
     'hero_title': 'Excelencia Operacional en Minería',
     'hero_subtitle': 'Impulsamos la eficiencia y la sostenibilidad en cada proceso.',
     'hero_button_text': 'Descubre Nuestro Trabajo',
 
-    // CONTACT SECTION
+    // ==========================================================
+    // 3. SERVICES INTRO SECTION (HOME PAGE)
+    // ==========================================================
+    'services_intro_title': 'Nuestras Soluciones Integrales', 
+    'services_intro_subtitle': 'Ingeniería avanzada y tecnología industrial para maximizar la eficiencia en minería.', 
+    'contact_us_cta': 'Ver Servicios', 
+
+    // ==========================================================
+    // 4. PUBLISHINGS INTRO SECTION (HOME PAGE) - Usa PublishingsSection
+    // ==========================================================
+    'publishings_main_title': 'Publicaciones para la minería del mañana',
+    'publishings_main_subtitle': 'Conoce nuestras publicaciones sobre el desarrollo tecnológico y futuro de la industria.',
+    'publishings_content_title': 'Liderando la innovación en Minería 4.0',
+    'publishings_content_body': 'Nuestro equipo se enfoca en la investigación de nuevos materiales, optimización de procesos y desarrollo de algoritmos de IA para mejorar la seguridad y la productividad de la minería a gran escala, con un enfoque en la sostenibilidad y el impacto ambiental.',
+    'publishings_content_button': 'Ver Publicaciones',
+
+    // ==========================================================
+    // 5. FOOTER SECTION
+    // ==========================================================
+    'footer_copyright': 'Todos los derechos reservados',
+    'footer_legal_notice': 'Aviso Legal',
+
+    // ==========================================================
+    // 6. CONTACT SECTION
+    // ==========================================================
     'contact_title': 'Conversemos Sobre Tu Proyecto',
     'contact_subtitle': 'Estamos listos para conversar sobre tu próximo proyecto minero. Elige la vía que prefieras.',
     'contact_cards_title': 'Medios de Contacto',
@@ -204,136 +246,137 @@ final Map<String, dynamic> appTranslations = {
     'contact_card_form_title': 'Formulario de Mensaje',
     'contact_card_form_button': 'Enviar Mensaje',
 
-    // NUEVAS CLAVES DE FORMULARIO DE CONTACTO
+    // Claves de Formulario
     'form_name_label': 'Tu Nombre',
     'form_email_label': 'Tu Correo Electrónico',
     'form_message_label': 'Tu Mensaje o Consulta',
     'form_submit_cta': 'Enviar Solicitud',
     
     // ==========================================================
-    // FOOTER SECTION 🚨 CLAVES AÑADIDAS
-    // ==========================================================
-    'footer_copyright': 'Todos los derechos reservados',
-    'footer_legal_notice': 'Aviso Legal',
-
-    // ==========================================================
-    // ESTRUCTURA DE INVESTIGACIÓN (RESEARCH SECTION HOME)
-    // ==========================================================
-    'research_main_title': 'Investigación para la minería del mañana',
-    'research_main_subtitle': 'Conoce nuestra participación en el desarrollo tecnológico del futuro.',
-    'research_content_title': 'Liderando la innovación en Minería 4.0',
-    'research_content_body': 'Nuestro equipo se enfoca en la investigación de nuevos materiales, optimización de procesos y desarrollo de algoritmos de IA para mejorar la seguridad y la productividad de la minería a gran escala, con un enfoque en la sostenibilidad y el impacto ambiental.',
-    'research_content_button': 'Ver Proyectos',
-
-    // ==========================================================
-    // ESTRUCTURA DE SERVICIOS (9 Tarjetas de Valor Comercial)
+    // 7. ESTRUCTURA DE SERVICIOS (FLAT - CON ID y TEXTOS COMPLETOS)
+    // 🚨 MODIFICADO: Estructura plana con textos completos y ID de subcategoría
     // ==========================================================
     'services_data': [
       // 1. Geometalurgia (Principal)
       {
-        'title': 'Geometalurgia Estratégica y Optimización de Procesos',
+        'id': '1',
+        'title': 'Geometalurgia',
         'route': '/services/geometalurgia', 
         'icon': 'precision_manufacturing',
-        'summary': 'Investigación y evaluación integral para maximizar la recuperación de mineral y agua, mientras reducimos drásticamente los riesgos y costos operacionales.',
+        'summary': 'Servicios de investigación y evaluación de los distintos procedimientos y componentes involucrados en el procesamiento de minerales que permiten optimizar las operaciones, maximizando así la recuperación tanto del mineral valioso como del recurso agua y a su vez disminuyendo los riesgos operacionales.',
       },
       // 1a. Sub: Flotation Research
       {
-        'title': 'Optimización Avanzada de Flotación',
+        'id': '1a',
+        'title': 'Servicio de investigación de flotación',
         'route': '/services/geometalurgia/flotacion',
         'icon': 'insights', 
-        'summary': 'Instalamos sensores especializados para medición simultánea de flujo de gas y espuma, creando líneas de base operacionales precisas para su máxima eficiencia metalúrgica.',
+        'summary': 'La optimización del rendimiento metalúrgico de celdas de flotación requiere de la búsqueda de perfiles de flujo de aire y alturas de espuma a lo largo del banco que sean compatibles con las condiciones necesarias para la circulación del flujo volumétrico de alimentación. La dispersión de aire es el proceso más relevante que ocurre en máquinas de flotación. Por ende, realizamos la medición simultánea y continua del flujo de gas, densidad aparente de la pulpa, y altura de espuma, además de mediciones puntuales frecuentes de densidad de pulpa, contenido de gas, y tamaño de burbuja en todas las celdas de un banco. Estas mediciones se llevan a cabo mediante la implementación de sensores que han sido especialmente desarrollados para la caracterización de la operación de celdas que procesan pulpas minerales. Los resultados obtenidos nos permiten crear líneas de base operacional en bancos de celdas del circuito de flotación, que a su vez permiten mantener a la celda en su máximo punto operacional.',
       },
       // 1b. Sub: Clay Modeling
       {
-        'title': 'Modelamiento y Control de Viscosidad por Arcillas',
+        'id': '1b',
+        'title': 'Modelamiento y análisis de arcillas',
         'route': '/services/geometalurgia/arcillas',
         'icon': 'texture', 
-        'summary': 'Determinación del tipo de arcillas mediante examinación mineralógica de alta precisión, ofreciendo soluciones que reducen significativamente el consumo de ácido, la viscosidad y los costos operativos.',
+        'summary': 'La presencia de arcillas puede generar efectos negativos a la hora de concentrar minerales de cobre. Por ende, en la conminución, la presencia de estas disminuye la eficiencia de chancado y molienda debido al incremento de viscosidad. En flotación, se reduce la recuperación y ley de concentrado debido a la reducción de flotabilidad de los minerales de cobre, por otra parte, en la lixiviación, provocan la formación de aglomerados y aumentan la viscosidad de la pulpa, lo que impacta negativamente la recuperación del cobre, generando mayor consumo de ácido sulfúrico. Mediante la examinación mineralógica de alta precisión, podemos determinar que tipo de arcillas se encuentran presentes y en base a esto, analizar y recomendar soluciones que permitan principalmente reducir los costos operativos. Además, realizamos modelamiento de control de arcillas para así evitar las tragedias operacionales.',
       },
       // 1c. Sub: Reagents
       {
-        'title': 'Análisis y Optimización de Reactivos Químicos',
+        'id': '1c',
+        'title': 'Análisis de reactivos',
         'route': '/services/geometalurgia/reactivos',
         'icon': 'science', 
-        'summary': 'Estudios detallados de floculantes y espumantes para ajustar con precisión los procesos de espesamiento, flotación y asegurar la recuperación óptima del recurso hídrico.',
+        'summary': 'En el área de reactivos, realizamos pruebas y estudios de floculantes y espumantes para así optimizar los procesos operacionales de espesamiento, flotación y recuperación de agua.',
       },
       
       // 2. TRANSPORTE DE FLUIDOS (Principal)
       {
-        'title': 'Sistemas de Bombeo y Transporte de Fluidos de Alto Rendimiento',
+        'id': '2',
+        'title': 'Transporte de fluidos',
         'route': '/services/transporte_fluidos', 
         'icon': 'waves_outlined',
-        'summary': 'Suministro, puesta en marcha y monitoreo continuo de una amplia gama de equipos de bombeo de alta calidad, con stock de repuestos estratégico para asegurar la continuidad operacional.',
+        'summary': 'Manejo de fluidos mediante bombeo: contamos con altos estándares de manufacturación, ofreciendo una basta gama de equipos de bombeo, en cualquier materialidad y para cualquier tipo de aplicación que el cliente necesite. Una vez entregado el activo, nos aseguramos de que este funcione en perfectas condiciones, asesorando su puesta en marcha, manteniendo un servicio de supervisión con tecnología de monitoreo de condiciones y manteniendo un stock de repuesto al alcance del cliente en caso de que de que lo necesite. Para más información de nuestro catálogo, contáctanos.',
       },
       
       // 3. METALMECÁNICA (Principal)
       {
-        'title': 'Metalmecánica de Precisión y Fabricación de Piezas Críticas',
-        'route': '/services/metalmecanica', // Corregida la ruta faltante de '/'
+        'id': '3',
+        'title': 'Metalmecánica',
+        'route': '/services/metalmecanica', 
         'icon': 'handyman_outlined',
-        'summary': 'Escaneo digital y fabricación de cualquier pieza metálica crítica. Optimizamos aleaciones y garantizamos fundición de la más alta calidad para una durabilidad superior y continuidad operacional.',
+        'summary': 'Realizamos el levantamiento de cualquier pieza metálica crítica para su posterior fabricación sin la necesidad de ninguna modificación, dando así continuidad operacional. En caso de requerir, optimizamos las aleaciones para así mejorar la durabilidad de la pieza. Nos aseguramos de que el proceso de fundición y mecanizado cumplan con los más altos estándares de calidad.',
       },
 
       // 4. AUTOMATIZACIÓN DE PROCESOS (Principal)
       {
-        'title': 'Automatización Industrial Avanzada y Eficiencia',
+        'id': '4',
+        'title': 'Automatización de procesos',
         'route': '/services/automatizacion', 
         'icon': 'memory_outlined',
-        'summary': 'Implementamos tecnología para reemplazar tareas manuales de riesgo, optimizando la eficiencia de planta, minimizando errores y logrando ahorros significativos de tiempo y costos.',
+        'summary': 'Ofrecemos tecnología para realizar tareas que antes se hacían manualmente, con el objetivo de optimizar la eficiencia, reducir errores, ahorrar tiempo y costos operacionales.',
       },
       
       // 4a. Sub: Automatic Lubrication
       {
-        'title': 'Sistemas de Lubricación Automática (Tecnología Alemana)',
+        'id': '4a',
+        'title': 'Lubricación automática',
         'route': '/services/automatizacion/lubricacion',
         'icon': 'settings_suggest', 
-        'summary': 'Dispositivos para puntos de difícil acceso o peligrosos que extienden la vida útil del equipo, reducen el tiempo de inactividad por desgaste y optimizan la seguridad y consumo de lubricante.',
+        'summary': 'En la minería, muchos puntos de lubricación son difíciles de alcanzar o se encuentran en entornos peligrosos, para ello, ofrecemos dispositivos de lubricación automática para una serie de diferentes aplicaciones. Desde dispositivos electromecánicos, eletroquímicos hasta dispositivos con varias líneas de lubricación. Lubricadores automáticos de tecnología alemana que permiten un mayor ahorro de tiempo, menos tiempo de inactividad de las máquinas debido a desgaste, menor consumo de lubricante, mayor vida útil, descarga de lubricante en función de las necesidades operacionales, menor riesgo de contaminación e impurezas. Por lo que se optimiza la seguridad en el trabajo y facilita el control y supervisión. Para más información de nuestro catálogo, contáctanos.',
       },
       
       // 4b. Sub: Remote Monitoring (Wear Prediction) and Pigging
       {
-        'title': 'Monitoreo Remoto Patentado y Pigging',
+        'id': '4b',
+        'title': 'Tecnología de monitoreo',
         'route': '/services/automatizacion/monitoreo',
         'icon': 'leak_add', 
-        'summary': 'Gestión de datos de desgaste de revestimientos de molinos/chutes en tiempo real (sin cables/alimentación externa). Incluye Pigging Stations para inspección y mantenimiento seguro de tuberías.',
+        'summary': 'Predicción de desgaste de revestimiento de molinos y chute de forma remota. Tecnología que recopila y gestiona datos de desgaste en tiempo real para optimizar y reducir el desgaste de revestimientos en futuras líneas de procesamientos y así ahorrar costos operacionales. Esta tecnología patentada monitorea mientras el activo está en funcionamiento sin la necesidad de alimentación externa ni cables. Las “Pigging stations” (balas a alta presión) realizan inspección, limpieza y mantenimiento de tuberías, y facilitan el flujo simultáneo de múltiples productos. Disminuyen los riesgos operaciones y facilitan el mantenimiento al ser una opción confiable y segura. Para más información de nuestras tecnologías, contáctanos.',
+      },
+
+      // 4c. Sub: Fluid Circuit Design
+      {
+        'id': '4c',
+        'title': 'Diseño y fabricación de circuito de fluidos',
+        'route': '/services/automatizacion/diseno-fluidos',
+        'icon': 'waves_outlined', 
+        'summary': 'Ante la necesidad de facilitar la operación de limpieza en planta concentradora, diseñamos y elaboramos circuitos automatizados de plantas de floculante para relaves de emergencia y planta de molibdeno.',
       },
     ],
 
     // ==========================================================
-    // ESTRUCTURA DE INVESTIGACIÓN (RESEARCH PAGE)
+    // 8. ESTRUCTURA DE PUBLICACIONES (PUBLISHINGS PAGE)
     // ==========================================================
-    'research_intro_title': 'Investigación Científica e Insights Mineros',
-    'research_intro_subtitle': 'Profundizamos en los desafíos del sector minero y compartimos nuestras conclusiones basadas en datos.',
-    'research_read_more_cta': 'Leer Artículo Completo',
+    'publishings_intro_title': 'Publicaciones Científicas e Insights Mineros',
+    'publishings_intro_subtitle': 'Profundizamos en los desafíos del sector minero y compartimos nuestras conclusiones basadas en datos.',
+    'publishings_read_more_cta': 'Leer Artículo Completo',
     
-    // Claves para el menú (MANTENIDAS)
-    'research_1': 'Minería Sostenible',
-    'research_2': 'IA en Flotación',
-    'research_3': 'Gestión de Relaves',
+    // 🚨 CLAVES DE MENÚ ANTIGUAS ELIMINADAS
 
-    'research_data': [
+    'publishings_data': [
       {
         'title': 'Prácticas de Minería Sostenible para Regiones Áridas',
         'summary': 'Estudio comparativo sobre técnicas de recirculación de agua en el Desierto de Atacama, enfocándose en maximizar la eficiencia con mínimo impacto ambiental.',
-        'route': '/research/mineria-sostenible',
+        'route': '/publishings/mineria-sostenible', 
         'icon': 'insights',
       },
       {
         'title': 'El Rol de la Inteligencia Artificial en la Eficiencia de Flotación',
         'summary': 'Investigación que detalla la aplicación de redes neuronales para predecir y ajustar parámetros de flotación en tiempo real, reduciendo significativamente el uso de reactivos.',
-        'route': '/research/ia-flotacion',
+        'route': '/publishings/ia-flotacion', 
         'icon': 'psychology',
       },
       {
         'title': 'Técnicas Innovadoras para la Gestión de Relaves Secos',
         'summary': 'Análisis de nuevas tecnologías para la contención estable y segura de residuos mineros, enfatizando la estabilidad geotécnica y la recuperación hídrica.',
-        'route': '/research/gestion-relaves',
+        'route': '/publishings/gestion-relaves', 
         'icon': 'science',
       },
       {
         'title': 'Optimización del Consumo Energético en Plantas de Chancado',
         'summary': 'Evaluación de la eficiencia energética en circuitos de chancado primario mediante modelos avanzados de simulación dinámica.',
-        'route': '/research/energia-chancado',
+        'route': '/publishings/energia-chancado', 
         'icon': 'memory_outlined',
       },
     ],

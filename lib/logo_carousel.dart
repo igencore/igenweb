@@ -1,9 +1,12 @@
-// Archivo: lib/logo_carousel.dart (Limpiado y Final)
+// Archivo: lib/logo_carousel.dart (FINAL: CON PAUSA POR SCROLL)
 
 import 'package:flutter/material.dart';
 
 class LogoCarousel extends StatefulWidget {
-  const LogoCarousel({super.key});
+  // 🚨 NUEVO: Notificador para recibir el estado de pausa desde el padre
+  final ValueNotifier<bool>? isPausedNotifier;
+
+  const LogoCarousel({super.key, this.isPausedNotifier});
 
   @override
   State<LogoCarousel> createState() => _LogoCarouselState();
@@ -22,10 +25,7 @@ class _LogoCarouselState extends State<LogoCarousel> with SingleTickerProviderSt
     'assets/images/logos/logo5.png',
   ];
   
-  // Usamos un número alto para que el ListView parezca infinito
   static const int itemCount = 1000; 
-
-  // Constantes de dimensiones
   static const double logoMaxHeight = 56.0; 
   static const double logoEstimatedWidth = 110.0; 
   static const double logoHorizontalPadding = 24.0; 
@@ -42,33 +42,62 @@ class _LogoCarouselState extends State<LogoCarousel> with SingleTickerProviderSt
       duration: const Duration(seconds: 30), 
     );
     
-    // Calcula el ancho de un solo loop para la traslación.
+    // Calcula el ancho de un solo loop
     final double singleLoopWidth = originalLogoPaths.length * logoFullEstimatedWidth;
     
-    // La animación mueve la posición de scroll.
+    // Listener principal de la animación
     _animationController.addListener(() {
       if (!_scrollController.hasClients) return;
       
-      // Calculamos la posición de scroll basada en el valor de la animación (0.0 a 1.0)
-      // La animación debe ir de 0 al ancho de un solo loop.
       double scrollPosition = _animationController.value * singleLoopWidth;
-      
-      // Si la posición calculada se acerca al final del primer loop,
-      // la reiniciamos suavemente al inicio para un efecto continuo.
-      // Usamos el módulo (%) para garantizar el loop infinito continuo.
       scrollPosition = scrollPosition % singleLoopWidth;
       
-      // Intentar saltar a la nueva posición.
       if (_scrollController.hasClients) {
           _scrollController.jumpTo(scrollPosition);
       }
     });
 
-    _animationController.repeat();
+    // 🚨 LÓGICA DE PAUSA
+    if (widget.isPausedNotifier != null) {
+      // Si el carrusel es inicializado y el padre dice que está pausado, lo detenemos.
+      if (widget.isPausedNotifier!.value) {
+        _animationController.stop();
+      } else {
+        _animationController.repeat();
+      }
+      
+      // Agregamos el listener para manejar los cambios de pausa/reanudación
+      widget.isPausedNotifier!.addListener(_handlePauseToggle);
+    } else {
+       // Si no se proporciona notificador, la animación corre por defecto.
+      _animationController.repeat();
+    }
+  }
+  
+  // FUNCIÓN PARA DETENER/REANUDAR
+  void _handlePauseToggle() {
+    if (widget.isPausedNotifier == null) return;
+    
+    if (widget.isPausedNotifier!.value) {
+      // True: Pausar
+      if (_animationController.isAnimating) {
+        _animationController.stop();
+      }
+    } else {
+      // False: Reanudar
+      if (!_animationController.isAnimating) {
+        _animationController.repeat();
+      }
+    }
   }
 
   @override
   void dispose() {
+    // 🚨 REMOVER LISTENER DE PAUSA
+    if (widget.isPausedNotifier != null) {
+      widget.isPausedNotifier!.removeListener(_handlePauseToggle);
+    }
+    
     _animationController.stop();
     _animationController.dispose();
     _scrollController.dispose();
@@ -80,13 +109,11 @@ class _LogoCarouselState extends State<LogoCarousel> with SingleTickerProviderSt
     
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Obtenemos el ancho visible disponible
         final double screenWidth = constraints.maxWidth;
         
-        // Eliminamos el NotificationListener ya que _isScrollingByUser fue eliminado.
         return Center(
           child: SizedBox(
-            width: screenWidth, // Contenedor que define el área visible
+            width: screenWidth, 
             height: logoMaxHeight, 
             
             child: ListView.builder(
@@ -97,7 +124,6 @@ class _LogoCarouselState extends State<LogoCarousel> with SingleTickerProviderSt
               itemCount: itemCount, 
               
               itemBuilder: (context, index) {
-                // Obtenemos el logo de la lista original usando el módulo (%)
                 final path = originalLogoPaths[index % originalLogoPaths.length];
                 
                 final logoColor = Theme.of(context)
@@ -110,12 +136,12 @@ class _LogoCarouselState extends State<LogoCarousel> with SingleTickerProviderSt
                   
                   child: Container( 
                     height: logoMaxHeight, 
-                    width: logoEstimatedWidth, // Ancho fijo para que el ListView sepa su tamaño
+                    width: logoEstimatedWidth, 
                     alignment: Alignment.center,
                     
                     child: Image.asset(
                       path,
-                      fit: BoxFit.fitHeight, // Permite proporciones variables dentro del ancho fijo
+                      fit: BoxFit.fitHeight, 
                       color: logoColor, 
                     ),
                   ),

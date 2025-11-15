@@ -81,7 +81,7 @@ class MainMenu extends StatelessWidget {
             _buildMenuItem(context, translations['services'] as String? ?? 'Servicios', '/services', menuTextStyle),
             
             // 4. RESEARCH (ENLACE DIRECTO)
-            _buildMenuItem(context, translations['research'] as String? ?? 'Investigación', '/research', menuTextStyle),
+            _buildMenuItem(context, translations['publications'] as String? ?? 'Publicaciones', '/publishings', menuTextStyle),
             
             // 5. CONTACTO (Botón Destacado)
             _buildContactButton(context, translations['contact'] as String? ?? 'Contacto', '/contact', menuTextStyle, colorScheme),

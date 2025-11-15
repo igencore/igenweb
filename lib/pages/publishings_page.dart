@@ -1,4 +1,4 @@
-// Archivo: lib/pages/research_page.dart (FINAL CON IMAGEN INTRODUCTORIA y enlaces deshabilitados)
+// Archivo: lib/pages/publishings_page.dart (FINAL CON IMAGEN INTRODUCTORIA)
 
 import 'package:flutter/material.dart';
 // import 'package:go_router/go_router.dart'; <-- Necesario para los enlaces
@@ -7,16 +7,16 @@ import '../components/footer_section.dart';
 import '../translations.dart'; 
 
 // ==========================================================
-// researchImages
+// 🚨 CAMBIO 1: Nombre de la lista de imágenes
 // ==========================================================
-const List<String> researchImages = [
-  'assets/images/research_img_1.jpg',
-  'assets/images/research_img_2.png',
-  'assets/images/research_img_3.png',
+const List<String> publishingsImages = [
+  'assets/images/publishings_img_1.jpg', // 🚨 Actualiza las rutas de tus assets si cambian de nombre
+  'assets/images/publishings_img_2.png',
+  'assets/images/publishings_img_3.png',
 ];
 
-class ResearchPage extends StatelessWidget {
-  const ResearchPage({super.key});
+class PublishingsPage extends StatelessWidget {
+  const PublishingsPage({super.key});
 
   // ====================================================================
   // FUNCIÓN HELPER: Convierte String a IconData (Sin cambios)
@@ -50,8 +50,9 @@ class ResearchPage extends StatelessWidget {
           builder: (context, language, child) {
             final translations = appTranslations[language] as Map<String, dynamic>? ?? {};
             
-            final researchData = translations['research_data'] as List<dynamic>? ?? [];
-            final readMoreCta = translations['research_read_more_cta'] as String? ?? 'Read Article';
+            // 🚨 CAMBIO 2: Acceder a 'publishings_data' y 'publishings_read_more_cta'
+            final publishingsData = translations['publishings_data'] as List<dynamic>? ?? [];
+            final readMoreCta = translations['publishings_read_more_cta'] as String? ?? 'Read Article';
 
             return Column(
               children: [
@@ -66,8 +67,9 @@ class ResearchPage extends StatelessWidget {
                   constraints: const BoxConstraints(maxWidth: 1200),
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
                   child: isDesktop
-                      ? _buildDesktopGrid(context, researchData, colorScheme, readMoreCta)
-                      : _buildMobileList(context, researchData, colorScheme, readMoreCta),
+                      // 🚨 CAMBIO 3: Pasar 'publishingsData' a las funciones de construcción
+                      ? _buildDesktopGrid(context, publishingsData, colorScheme, readMoreCta)
+                      : _buildMobileList(context, publishingsData, colorScheme, readMoreCta),
                 ),
                 
                 const SizedBox(height: 40),
@@ -83,16 +85,18 @@ class ResearchPage extends StatelessWidget {
   }
   
   // ====================================================================
-  // WIDGET INTRODUCTORIO (Sin cambios)
+  // WIDGET INTRODUCTORIO
   // ====================================================================
   Widget _buildIntroductoryImage(BuildContext context, Map<String, dynamic> translations, ColorScheme colorScheme) {
     final isDesktop = MediaQuery.of(context).size.width > 900;
     
-    final heroTitle = translations['research_intro_title'] as String? ?? 'Investigación Científica';
+    // 🚨 CAMBIO 4: Texto del Hero actualizado
+    final heroTitle = translations['publishings_intro_title'] as String? ?? 'Publicaciones Recientes';
     
-    final String imageUrl = researchImages.isNotEmpty 
-      ? researchImages[0] 
-      : 'assets/images/default_research_placeholder.jpg'; 
+    // 🚨 CAMBIO 5: Usar la lista de imágenes 'publishingsImages'
+    final String imageUrl = publishingsImages.isNotEmpty 
+      ? publishingsImages[0] 
+      : 'assets/images/default_publishings_placeholder.jpg'; 
 
     return Container(
       width: double.infinity,
@@ -132,11 +136,12 @@ class ResearchPage extends StatelessWidget {
 
 
   // ====================================================================
-  // WIDGETS AUXILIARES (Sin cambios)
+  // WIDGETS AUXILIARES
   // ====================================================================
 
   Widget _buildHeader(BuildContext context, Map<String, dynamic> translations, ColorScheme colorScheme) {
-    final subtitle = translations['research_intro_subtitle'] as String? ?? 'Profundizamos en los desafíos del sector minero y compartimos nuestras conclusiones.';
+    // 🚨 CAMBIO 6: Texto del subtítulo actualizado
+    final subtitle = translations['publishings_intro_subtitle'] as String? ?? 'Compartimos nuestras conclusiones y conocimientos relevantes para la industria.';
     
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
@@ -153,7 +158,8 @@ class ResearchPage extends StatelessWidget {
       ),
     );
   }
-
+  
+  // 🚨 CAMBIO 7: Uso de _PublishingCard
   Widget _buildDesktopGrid(BuildContext context, List<dynamic> articles, ColorScheme colorScheme, String readMoreCta) {
     return GridView.builder(
       shrinkWrap: true,
@@ -169,10 +175,10 @@ class ResearchPage extends StatelessWidget {
         final article = articles[index] as Map<String, dynamic>?;
         if (article == null) return const SizedBox.shrink();
 
-        return _ResearchCard(
+        return _PublishingCard(
           title: article['title'] as String? ?? 'Artículo Desconocido',
           summary: article['summary'] as String? ?? 'Resumen no disponible.',
-          route: article['route'] as String? ?? '/research',
+          route: article['route'] as String? ?? '/publishings', // 🚨 Ruta por defecto
           iconData: _getIconData(article['icon'] as String? ?? 'article'), 
           colorScheme: colorScheme,
           readMoreCta: readMoreCta,
@@ -181,6 +187,7 @@ class ResearchPage extends StatelessWidget {
     );
   }
 
+  // 🚨 CAMBIO 8: Uso de _PublishingCard
   Widget _buildMobileList(BuildContext context, List<dynamic> articles, ColorScheme colorScheme, String readMoreCta) {
     return Column(
       children: articles.map((article) {
@@ -189,10 +196,10 @@ class ResearchPage extends StatelessWidget {
         
         return Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
-          child: _ResearchCard(
+          child: _PublishingCard(
             title: articleMap['title'] as String? ?? 'Artículo Desconocido',
             summary: articleMap['summary'] as String? ?? 'Resumen no disponible.',
-            route: articleMap['route'] as String? ?? '/research',
+            route: articleMap['route'] as String? ?? '/publishings', // 🚨 Ruta por defecto
             iconData: _getIconData(articleMap['icon'] as String? ?? 'article'), 
             colorScheme: colorScheme,
             readMoreCta: readMoreCta,
@@ -204,9 +211,9 @@ class ResearchPage extends StatelessWidget {
 }
 
 // ====================================================================
-// WIDGET PRIVADO PARA LA TARJETA DE CADA ARTÍCULO (MODIFICADO)
+// 🚨 CAMBIO 9: Renombrar la clase privada
 // ====================================================================
-class _ResearchCard extends StatelessWidget {
+class _PublishingCard extends StatelessWidget {
   final String title;
   final String summary;
   final String route;
@@ -214,7 +221,7 @@ class _ResearchCard extends StatelessWidget {
   final ColorScheme colorScheme;
   final String readMoreCta;
 
-  const _ResearchCard({
+  const _PublishingCard({
     required this.title,
     required this.summary,
     required this.route,
@@ -229,8 +236,6 @@ class _ResearchCard extends StatelessWidget {
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        // NOTA: Se mantiene InkWell funcional para toda la tarjeta si la deseas
-        // mantener, aunque el botón de abajo estará deshabilitado.
         onTap: () {
           // if (context.mounted) context.go(route);
         },
@@ -280,14 +285,12 @@ class _ResearchCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),
                       child: TextButton.icon(
-                        // 🚨 CAMBIO CLAVE: Se establece a null para deshabilitar el botón
+                        // Se mantiene deshabilitado para desarrollo
                         onPressed: null, 
                         
                         icon: const Icon(Icons.chevron_right),
                         label: Text(readMoreCta),
                         style: TextButton.styleFrom(
-                          // NOTA: Cuando onPressed es null, TextButton.icon toma un color 
-                          // deshabilitado por defecto (gris).
                           foregroundColor: colorScheme.primary, 
                           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
                         ),

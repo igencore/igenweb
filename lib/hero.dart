@@ -1,4 +1,4 @@
-// Archivo: lib/hero.dart (ACTUALIZADO CON RELLENO EXTERIOR)
+// Archivo: lib/hero.dart (ACTUALIZADO CON RELLENO EXTERIOR Y BOTÓN CORREGIDO)
 
 import 'package:flutter/material.dart';
 
@@ -32,7 +32,7 @@ class HeroSection extends StatelessWidget {
   }
 
   // ==========================================================
-  // SECCIÓN DE ESCRITORIO (ACTUALIZADA con Padding exterior)
+  // SECCIÓN DE ESCRITORIO (ACTUALIZADA con Botón Corregido)
   // ==========================================================
   Widget _buildDesktopHeroSection(BuildContext context) {
     const double cardHorizontalPadding = 32.0; 
@@ -72,14 +72,12 @@ class HeroSection extends StatelessWidget {
                         ),
                         
                         const SizedBox(height: 32),
-                        FilledButton(
+                        
+                        // 🚨 CORRECCIÓN 1: Cambiado a ElevatedButton
+                        // 🚨 CORRECCIÓN 2: Eliminado el style local para usar el tema Amarillo/Negro
+                        ElevatedButton(
                           onPressed: onButtonPressed, 
-                          style: FilledButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                            textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            foregroundColor: Theme.of(context).colorScheme.onPrimary, 
-                          ),
+                          // ⚠️ ¡Eliminado el style: FilledButton.styleFrom(...)!
                           child: Text(buttonText), 
                         ),
                       ],
@@ -111,7 +109,7 @@ class HeroSection extends StatelessWidget {
   }
 
   // ==========================================================
-  // SECCIÓN MÓVIL (ACTUALIZADA con Padding exterior)
+  // SECCIÓN MÓVIL (ACTUALIZADA con Botón Corregido)
   // ==========================================================
   Widget _buildMobileHeroSection(BuildContext context) {
     
@@ -155,14 +153,12 @@ class HeroSection extends StatelessWidget {
                     ),
                     
                     const SizedBox(height: 24),
-                    FilledButton(
+                    
+                    // 🚨 CORRECCIÓN 1: Cambiado a ElevatedButton
+                    // 🚨 CORRECCIÓN 2: Eliminado el style local para usar el tema Amarillo/Negro
+                    ElevatedButton(
                       onPressed: onButtonPressed,
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        foregroundColor: Theme.of(context).colorScheme.onPrimary, 
-                      ),
+                      // ⚠️ ¡Eliminado el style: FilledButton.styleFrom(...)!
                       child: Text(buttonText), 
                     ),
                   ],

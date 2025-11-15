@@ -1,4 +1,4 @@
-// Archivo: lib/pages/about_page.dart (CON LOGOTIPO CLÁSICO Y ANCLAS)
+// Archivo: lib/pages/about_page.dart (CON IMAGEN HERO MOVIDA Y ESCALADA EN MOBILE)
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart'; 
@@ -23,7 +23,6 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  // Bandera para evitar intentar hacer scroll varias veces en la misma ruta
   String _lastCheckedHash = ''; 
   
   // --- Helpers de Contenido ---
@@ -43,7 +42,6 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   Map<String, String> getSectionContent(String lang) {
-    // Contenido reescrito y separado en 3 párrafos
     return lang == 'ES' ? {
       'p1': 'Somos una empresa chilena constituida legalmente en 2021, con el deseo de entregar **soluciones integrales e innovadoras** que pudiesen incorporar la ingeniería, metalurgia, geología y la pasión por la investigación. Nuestro principal propósito es satisfacer las necesidades operacionales de nuestros clientes con el fin de optimizar y enriquecer la ejecución de los procesos involucrados en la minería.',
       'p2': 'Como resultado de nuestra fundación, hemos logrado una empresa con un marcado **carácter tecnológico e industrial**, destacando en la optimización de procesamiento de minerales, exploración geológica, mejoramiento en el transporte de fluidos, metalmecánica y automatización de procesos industriales. Estas áreas son requeridas en un amplio espectro de mercados, como la minería.',
@@ -96,15 +94,18 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     final languageNotifier = AppState.of(context).languageNotifier;
     final backgroundColor = Theme.of(context).scaffoldBackgroundColor; 
-    final colorScheme = Theme.of(context).colorScheme;
     
-    // === LÓGICA DE RESPONSIVIDAD PARA LA IMAGEN ===
+    // --- VARIABLES DE RESPONSIVIDAD Y TEMA ---
     final screenWidth = MediaQuery.of(context).size.width;
     final isDesktop = screenWidth > 900;
+    final themeModeNotifier = AppState.of(context).themeModeNotifier;
+    final colorScheme = Theme.of(context).colorScheme;
     
-    // CÁLCULO DEL ANCHO: Escritorio: 33%, Móvil: 50%
-    final imageWidth = screenWidth * (isDesktop ? 0.33 : 0.50);
-    // ==============================================
+    // CÁLCULO DEL ANCHO DE LA IMAGEN
+    // Escritorio: 33% (original)
+    // Móvil: 50% * 1.30 (30% más grande) = 65% del ancho de pantalla
+    final mobileImageScaleFactor = 1.30; // 30% extra
+    final imageWidth = screenWidth * (isDesktop ? 0.33 : (0.50 * mobileImageScaleFactor));
     
     return SingleChildScrollView(
       child: Container(
@@ -117,26 +118,16 @@ class _AboutPageState extends State<AboutPage> {
             final titles = getSectionTitles(language);
             final content = getSectionContent(language);
             
-            return Column(
+            return Column( // Columna principal de AboutPage
               children: [
-                // 1. HERO Y TÍTULO PRINCIPAL (CONTENEDOR)
+                // 1. TÍTULOS PRINCIPALES Y SUBTÍTULO
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 20),
                   constraints: const BoxConstraints(maxWidth: 1200),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      
-                      // 🚨 LOGOTIPO CLÁSICO
-                      Image.asset(
-                        'assets/images/igencoreclassic.png', // 🚨 CONFIRMA ESTA RUTA DE ASSETS
-                        width: imageWidth, // Aplicamos el ancho calculado
-                        fit: BoxFit.contain,
-                      ),
-                      
-                      const SizedBox(height: 36), // Espacio entre logo y título
-                      
-                      // TÍTULO PRINCIPAL
+                       // TÍTULO PRINCIPAL
                       Text(
                         language == 'ES' ? 'Quiénes Somos' : 'Who We Are',
                         style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -146,6 +137,7 @@ class _AboutPageState extends State<AboutPage> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
+                      // SUBTÍTULO
                       Text(
                         language == 'ES' ? 'Ingeniería, Innovación y Enfoque Industrial.' : 'Engineering, Innovation, and Industrial Focus.',
                         style: Theme.of(context).textTheme.titleLarge,
@@ -155,7 +147,31 @@ class _AboutPageState extends State<AboutPage> {
                   ),
                 ),
                 
-                // 2. CONTENIDO DETALLADO CON ANCLAS
+                // 🚨 2. IMAGEN HERO MOVIDA Y ESCALADA (DEBAJO DE LOS TÍTULOS)
+                ValueListenableBuilder<ThemeMode>(
+                  valueListenable: themeModeNotifier,
+                  builder: (context, themeMode, _) {
+                    final isDarkMode = themeMode == ThemeMode.dark;
+                    
+                    // Rutas con extensión .jpg
+                    final logoPath = isDarkMode
+                        ? 'assets/images/aboutusblack.jpg'
+                        : 'assets/images/aboutuswhite.jpg';
+                        
+                    return Column(
+                      children: [
+                        Image.asset(
+                          logoPath, 
+                          width: imageWidth, // Usa el ancho calculado dinámicamente
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(height: 40), // Espacio antes de la primera sección
+                      ],
+                    );
+                  },
+                ),
+                
+                // 3. CONTENIDO DETALLADO CON ANCLAS (Propósito, Enfoque, Trayectoria)
                 Container(
                   constraints: const BoxConstraints(maxWidth: 1000),
                   padding: const EdgeInsets.only(left: 20, right: 20, bottom: 60),
@@ -167,7 +183,7 @@ class _AboutPageState extends State<AboutPage> {
                         key: _propositoKey,
                         title: titles['proposito']!,
                         content: content['p1']!,
-                        colorScheme: colorScheme,
+                        colorScheme: Theme.of(context).colorScheme,
                         iconData: Icons.lightbulb_outline,
                         imageFirst: true, 
                       ),
@@ -177,7 +193,7 @@ class _AboutPageState extends State<AboutPage> {
                         key: _enfoqueKey,
                         title: titles['enfoque']!,
                         content: content['p2']!,
-                        colorScheme: colorScheme,
+                        colorScheme: Theme.of(context).colorScheme,
                         iconData: Icons.widgets_outlined,
                         imageFirst: false,
                       ),
@@ -187,7 +203,7 @@ class _AboutPageState extends State<AboutPage> {
                         key: _trayectoriaKey,
                         title: titles['trayectoria']!,
                         content: content['p3']!,
-                        colorScheme: colorScheme,
+                        colorScheme: Theme.of(context).colorScheme,
                         iconData: Icons.trending_up,
                         imageFirst: true,
                       ),
@@ -195,13 +211,13 @@ class _AboutPageState extends State<AboutPage> {
                   ),
                 ),
 
-                // 3. SECCIÓN DE CONTACTO (Componente ContactSection)
+                // 4. SECCIÓN DE CONTACTO (Componente ContactSection)
                 Container(
-                  color: colorScheme.surfaceContainerHigh, 
+                  color: Theme.of(context).colorScheme.surfaceContainerHigh, 
                   child: ContactSection(), 
                 ),
                 
-                // 4. FOOTER
+                // 5. FOOTER
                 const FooterSection(),
               ],
             );
@@ -211,6 +227,15 @@ class _AboutPageState extends State<AboutPage> {
     );
   }
 }
+
+
+// ====================================================================
+// 🚀 WIDGET: _AboutHeroSection ELIMINADO/INTEGRADO
+// ====================================================================
+
+// El widget _AboutHeroSection original fue eliminado e integrado
+// en el widget _AboutPageState para facilitar el cambio de layout.
+// El código de la imagen ahora reside directamente en el build de _AboutPageState.
 
 
 // ====================================================================

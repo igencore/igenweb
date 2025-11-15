@@ -1,8 +1,10 @@
 // Archivo: lib/heroslider.dart
 
 import 'package:flutter/material.dart';
+import 'dart:async'; // Necesario para el Timer
 
 class HeroSlider extends StatefulWidget {
+  // Ahora la sección HeroSection que lo usa debe determinar su altura
   const HeroSlider({super.key});
 
   @override
@@ -19,71 +21,91 @@ class _HeroSliderState extends State<HeroSlider> with SingleTickerProviderStateM
   late AnimationController _controller;
   int _currentIndex = 0;
   int _previousIndex = 0; 
+  Timer? _slideshowTimer; // 🚨 Uso de Timer para un control más limpio
+
+  // Duraciones
+  static const Duration _fadeDuration = Duration(milliseconds: 1500);
+  static const Duration _slideDuration = Duration(seconds: 4);
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: _fadeDuration,
     )..addListener(() {
+      // Reconstruye el widget para actualizar la opacidad en AnimatedBuilder
       setState(() {});
     });
-    _startSlideshow();
+    
+    // Inicia el slideshow inmediatamente después de que el controlador esté listo
+    _controller.forward(from: 0.0);
+    _startSlideshowTimer(); 
   }
 
-  void _startSlideshow() {
-    Future.delayed(const Duration(seconds: 4), () {
-      if (!mounted) return;
+  void _startSlideshowTimer() {
+    // 🚨 Mejor práctica: Usar Timer.periodic o Timer simple recurrente
+    _slideshowTimer?.cancel(); // Cancela cualquier timer existente
+    
+    _slideshowTimer = Timer(_slideDuration, () {
+      if (!mounted) {
+        // Detiene la ejecución si el widget ya no está montado (seguridad)
+        _slideshowTimer?.cancel();
+        return;
+      }
       
+      // 1. Actualiza los índices
       _previousIndex = _currentIndex;
+      _currentIndex = (_currentIndex + 1) % images.length;
       
-      setState(() {
-        _currentIndex = (_currentIndex + 1) % images.length;
+      // 2. Reinicia la animación de desvanecimiento
+      _controller.forward(from: 0.0).then((_) {
+        // 3. Cuando la animación termina, reinicia el Timer para el siguiente slide
+        _startSlideshowTimer();
       });
 
-      _controller.forward(from: 0.0).then((_) {
-        _controller.value = 1.0; 
-        _startSlideshow();
-      });
+      // Se usa setState() para actualizar los índices en el frame de la animación
+      setState(() {});
     });
   }
 
   @override
   void dispose() {
+    _slideshowTimer?.cancel(); // 🚨 Importante: Cancelar el Timer
     _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // La animación va de 0.0 a 1.0 durante 1.5 segundos
+    if (images.isEmpty) {
+      return const SizedBox.shrink(); // No mostrar nada si no hay imágenes
+    }
+    
     final animation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     );
 
-    // 1. Usamos LayoutBuilder para obtener las restricciones de ancho (maxWidth)
+    // Usa LayoutBuilder para decidir el AspectRatio/Height según el ancho disponible
     return LayoutBuilder(
       builder: (context, constraints) {
-        // En HeroSection.dart, el punto de quiebre para móvil es 1000.
-        // Aquí, usamos un punto de quiebre similar, pero basándonos en el ancho
-        // disponible para el HeroSlider. Generalmente, un ancho disponible bajo
-        // (ej. < 600) indica un dispositivo móvil.
         final isMobile = constraints.maxWidth < 600;
         
-        // 2. Definimos la altura o AspectRatio condicionalmente
+        // Contenido del slider
         Widget sliderContent = Stack(
           fit: StackFit.expand,
           children: [
-            // 1. IMAGEN ANTERIOR
+            // 1. IMAGEN ANTERIOR (como base fija)
             Image.asset(
               images[_previousIndex],
               fit: BoxFit.cover, 
               key: ValueKey<int>(_previousIndex),
+              // Manejo de errores de imagen básico
+              errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[800]),
             ),
 
-            // 2. IMAGEN ACTUAL
+            // 2. IMAGEN ACTUAL (animada con opacidad)
             AnimatedBuilder(
               animation: animation,
               builder: (context, child) {
@@ -93,6 +115,8 @@ class _HeroSliderState extends State<HeroSlider> with SingleTickerProviderStateM
                     images[_currentIndex],
                     fit: BoxFit.cover,
                     key: ValueKey<int>(_currentIndex + 100),
+                    // Manejo de errores de imagen básico
+                    errorBuilder: (context, error, stackTrace) => Container(color: Colors.grey[700]),
                   ),
                 );
               },
@@ -100,17 +124,17 @@ class _HeroSliderState extends State<HeroSlider> with SingleTickerProviderStateM
           ],
         );
 
+        // 3. Aplicación de AspectRatio o altura fija
         if (isMobile) {
-          // 3. En MÓVIL: Forzar relación 1:1 (cuadrado)
-          // Usamos AspectRatio, y su altura será determinada por el ancho disponible.
+          // En MÓVIL: AspectRatio 1:1 (cuadrado)
           return AspectRatio(
-            aspectRatio: 1.0, // 1:1
+            aspectRatio: 1.0, 
             child: sliderContent,
           );
         } else {
-          // 4. En ESCRITORIO/TABLETA: Mantener la altura fija definida por el padre (HeroSection.dart)
+          // En ESCRITORIO/TABLETA: Si el padre no impone una altura (maxHeight.isFinite), usar 400.
           return SizedBox(
-            height: constraints.maxHeight.isFinite ? constraints.maxHeight : 400, // Usar 400 si el padre no la impone
+            height: constraints.maxHeight.isFinite ? constraints.maxHeight : 450, // Aumenté a 450 para mejor visualización
             child: sliderContent,
           );
         }

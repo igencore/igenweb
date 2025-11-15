@@ -1,9 +1,14 @@
-// Archivo: lib/main.dart (VERSIÓN FINAL CON RUTAS Y APPSTATE INYECTADO)
+// Archivo: lib/main.dart (VERSIÓN FINAL CON TEMAS PERSONALIZADOS Y SCROLL FIX)
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart'; 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart'; 
+// 🚨 Nuevo: Necesario para PointerDeviceKind
+import 'package:flutter/gestures.dart'; 
+
+// 🚨 IMPORTACIÓN AÑADIDA DEL TEMA PERSONALIZADO
+import 'theme.dart'; 
 
 // ==========================================================
 // 1. Importaciones de Páginas y Shell
@@ -11,9 +16,26 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'pages/home_page.dart'; 
 import 'pages/about_page.dart'; 
 import 'pages/services_page.dart'; 
-import 'pages/contact_page.dart'; // 🚨 IMPORTACIÓN AÑADIDA
-import 'pages/research_page.dart'; // 🚨 IMPORTACIÓN AÑADIDA
+import 'pages/contact_page.dart'; 
+import 'pages/publishings_page.dart'; 
 import 'app_shell.dart'; 
+
+// ==========================================================
+// 2. CORRECCIÓN DE SCROLL POR ARRASTRE (Para Web/Desktop Táctil)
+// ==========================================================
+
+// 🚨 Define un ScrollBehavior personalizado para forzar el scroll por arrastre
+class AppScrollBehavior extends MaterialScrollBehavior {
+  const AppScrollBehavior();
+
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    // Habilita el desplazamiento por ratón y tacto en todas las plataformas
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.touch,
+  };
+}
 
 // ==========================================================
 // PUNTO DE ENTRADA PRINCIPAL
@@ -55,7 +77,6 @@ class _IgenCoreAppState extends State<IgenCoreApp> {
             return AppState(
               themeModeNotifier: _themeMode,
               languageNotifier: _language,
-              // AppShell ya no necesita recibir los notifiers como argumentos
               child: AppShell(
                 child: child,
               ),
@@ -76,28 +97,27 @@ class _IgenCoreAppState extends State<IgenCoreApp> {
             GoRoute(
               path: '/services',
               builder: (context, state) => const ServicesPage(),
-              // Aseguramos la ruta para los detalles de servicios
               routes: [
                 GoRoute(
                   path: ':serviceId',
-                  builder: (context, state) => const ServicesPage(), // Usamos ServicesPage como fallback/base
+                  builder: (context, state) => const ServicesPage(),
                 ),
               ],
             ),
             
-            // 🚨 RUTA AÑADIDA: INVESTIGACIÓN
+            // RUTA: PUBLICACIONES
             GoRoute(
-              path: '/research',
-              builder: (context, state) => const ResearchPage(), 
+              path: '/publishings',
+              builder: (context, state) => const PublishingsPage(), 
               routes: [
                 GoRoute(
-                  path: ':articleId', // Para URLs como /research/mineria-sostenible
-                  builder: (context, state) => const ResearchPage(), // Usamos ResearchPage como fallback/base
+                  path: ':articleId', 
+                  builder: (context, state) => const PublishingsPage(),
                 ),
               ],
             ),
             
-            // 🚨 RUTA AÑADIDA: CONTACTO
+            // RUTA: CONTACTO
             GoRoute(
               path: '/contact',
               builder: (context, state) => const ContactPage(),
@@ -124,15 +144,13 @@ class _IgenCoreAppState extends State<IgenCoreApp> {
   void dispose() {
     _themeMode.dispose();
     _language.dispose();
-    _router.dispose(); // Es buena práctica liberar el router
+    _router.dispose(); 
     super.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
-    const Color seedColor = Colors.deepOrange; 
-    
     // ValueListenableBuilder solo escucha _themeMode para reconstruir MaterialApp
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: _themeMode,
@@ -140,23 +158,18 @@ class _IgenCoreAppState extends State<IgenCoreApp> {
         return MaterialApp.router( 
           title: 'iGenCore',
           themeMode: themeMode,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: seedColor,
-              brightness: Brightness.light,
-            ),
-          ),
-          darkTheme: ThemeData( 
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed( 
-              seedColor: seedColor,
-              brightness: Brightness.dark,  
-            ),
-          ),
+          // 🚨 APLICACIÓN DE LA SOLUCIÓN DE SCROLL
+          scrollBehavior: const AppScrollBehavior(), 
+          
+          theme: getLightTheme(),
+          darkTheme: getDarkTheme(),
           routerConfig: _router, 
         );
       },
     );
   }
 }
+
+// ⚠️ NOTA: Falta la definición del widget AppState, 
+// asumo que está definido en otro archivo o más abajo en este archivo.
+// Su uso con ValueNotifier es una excelente práctica.

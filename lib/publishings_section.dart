@@ -1,39 +1,35 @@
-// Archivo: lib/research_section.dart (COMPLETO: RECIBE TRADUCCIONES Y NAVEGA)
+// Archivo: lib/publishings_section.dart (RENOMBRADO Y CORREGIDO PARA EL BOTÓN)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; 
 import 'dart:async'; 
-import 'package:go_router/go_router.dart'; // 🚨 AÑADIDO: Necesario para context.go()
+import 'package:go_router/go_router.dart';
 
-// Las imágenes de ejemplo deben estar en assets/images/research
-const List<String> researchImages = [
-  'assets/images/research_img_1.jpg',
-  'assets/images/research_img_2.png',
-  'assets/images/research_img_3.png',
+// Las imágenes de ejemplo deben estar en assets/images/publishings
+const List<String> publishingsImages = [
+  'assets/images/publishings_img_1.jpg',
+  'assets/images/publishings_img_2.png',
+  'assets/images/publishings_img_3.png',
 ];
 
-class ResearchSection extends StatelessWidget {
-  // Ya recibe el mapa de traducciones correctamente.
+class PublishingsSection extends StatelessWidget {
   final Map<String, dynamic> translations;
 
-  const ResearchSection({
+  const PublishingsSection({
     super.key,
     required this.translations,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Usamos el mapa de traducciones directamente.
-    final researchText = translations; 
-
+    final publishingsText = translations; 
     final isDesktop = MediaQuery.of(context).size.width > 900;
     final double verticalPadding = isDesktop ? 48.0 : 24.0;
     final double innerPadding = isDesktop ? 36.0 : 20.0;
     final colorScheme = Theme.of(context).colorScheme;
 
-    // TÍTULOS Y SUBTÍTULOS USANDO EL MAPA RECIBIDO
-    final mainTitle = researchText['research_main_title'] as String? ?? 'Investigación para la minería del mañana';
-    final mainSubtitle = researchText['research_main_subtitle'] as String? ?? 'Conoce nuestra participación en el desarrollo tecnológico del futuro.';
+    final mainTitle = publishingsText['publishings_main_title'] as String? ?? 'Publicaciones para la minería del mañana';
+    final mainSubtitle = publishingsText['publishings_main_subtitle'] as String? ?? 'Conoce nuestra participación en el desarrollo tecnológico del futuro.';
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -76,8 +72,8 @@ class ResearchSection extends StatelessWidget {
                 const SizedBox(height: 48),
 
                 // Contenido dividido en dos columnas
-                _ResearchContent(
-                  researchText: researchText, 
+                _PublishingsContent( 
+                  publishingsText: publishingsText, 
                   colorScheme: colorScheme,
                 ),
               ],
@@ -90,12 +86,12 @@ class ResearchSection extends StatelessWidget {
 }
 
 // Widget interno que contiene las dos columnas y maneja la adaptación
-class _ResearchContent extends StatelessWidget {
-  final Map<String, dynamic> researchText; 
+class _PublishingsContent extends StatelessWidget {
+  final Map<String, dynamic> publishingsText; 
   final ColorScheme colorScheme;
 
-  const _ResearchContent({
-    required this.researchText,
+  const _PublishingsContent({
+    required this.publishingsText,
     required this.colorScheme,
   });
 
@@ -103,11 +99,9 @@ class _ResearchContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 900;
           
-    // Títulos y textos usando el mapa recibido
-    final contentTitle = researchText['research_content_title'] as String? ?? 'Liderando la innovación en Minería 4.0';
-    final contentBody = researchText['research_content_body'] as String? ?? 'Nuestro equipo se enfoca en la investigación de nuevos materiales, optimización de procesos y desarrollo de algoritmos de IA para mejorar la seguridad y la productividad de la minería a gran escala, con un enfoque en la sostenibilidad y el impacto ambiental.';
-    final contentButton = researchText['research_content_button'] as String? ?? 'Ver Proyectos';
-
+    final contentTitle = publishingsText['publishings_content_title'] as String? ?? 'Liderando la innovación en Minería 4.0';
+    final contentBody = publishingsText['publishings_content_body'] as String? ?? 'Nuestro equipo se enfoca en la investigación de nuevos materiales, optimización de procesos y desarrollo de algoritmos de IA para mejorar la seguridad y la productividad de la minería a gran escala, con un enfoque en la sostenibilidad y el impacto ambiental.';
+    final contentButton = publishingsText['publishings_content_button'] as String? ?? 'Ver Publicaciones';
 
     // Contenido del texto
     final textContent = Padding(
@@ -139,17 +133,15 @@ class _ResearchContent extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           // Botón de acción (ejemplo)
-          OutlinedButton(
+          
+          // 🚨 CORRECCIÓN 1: Cambiado a ElevatedButton para heredar el tema Amarillo/Negro
+          ElevatedButton(
             onPressed: () {
-              // 🚨 CORRECCIÓN FINAL: Implementación de la navegación del botón
-              context.go('/research'); 
-              debugPrint("Botón 'Ver Proyectos' presionado. Navegando a /research.");
+              context.go('/publishings'); 
+              debugPrint("Botón 'Ver Publicaciones' presionado. Navegando a /publishings.");
             },
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              side: BorderSide(color: colorScheme.primary, width: 2),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
+            // 🚨 CORRECCIÓN 2: Se ELIMINA el bloque style local para heredar el tema global
+            // Las propiedades de padding, shape y color ya están definidas en theme.dart
             child: Text(
               contentButton,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -161,7 +153,7 @@ class _ResearchContent extends StatelessWidget {
 
     // Contenido del slider
     final sliderContent = FadeSliderCard(
-      images: researchImages,
+      images: publishingsImages,
       colorScheme: colorScheme,
     );
 
@@ -186,7 +178,7 @@ class _ResearchContent extends StatelessWidget {
   }
 }
 
-// 🚨 FadeSliderCard se mantiene como HookWidget porque usa hooks y dart:async.
+// 🚨 FadeSliderCard se mantiene como HookWidget (Sin cambios necesarios)
 class FadeSliderCard extends HookWidget {
   final List<String> images;
   final ColorScheme colorScheme;

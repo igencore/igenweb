@@ -1,4 +1,4 @@
-// Archivo: lib/services_intro.dart (CORREGIDO PARA RECIBIR Y USAR TRADUCCIONES)
+// Archivo: lib/services_intro.dart (FINAL: BOTÓN MENOS RESALTADO)
 
 import 'package:flutter/material.dart';
 // 🚨 Importamos el componente de animación
@@ -9,10 +9,13 @@ import 'package:go_router/go_router.dart';
 class ServicesIntroSection extends StatelessWidget {
   // 🚨 CAMBIO 1: Agregamos el parámetro de traducciones
   final Map<String, dynamic> translations;
+  // 🚨 NUEVO: Parámetro para recibir el notificador de pausa
+  final ValueNotifier<bool>? isPausedNotifier;
 
   const ServicesIntroSection({
     super.key,
-    required this.translations, // Lo hacemos requerido para la consistencia con HomePage
+    required this.translations, 
+    this.isPausedNotifier, // 🚨 LO AÑADIMOS AL CONSTRUCTOR
   });
 
   void _handleServicesTap(BuildContext context) {
@@ -20,11 +23,8 @@ class ServicesIntroSection extends StatelessWidget {
     debugPrint("Navegando a la página de Servicios (/services)..."); 
   }
 
-  // 🚨 CAMBIO 2: Eliminamos el helper temporal de idioma.
-
   @override
   Widget build(BuildContext context) {
-    // 🚨 CAMBIO 3: Usamos directamente el mapa de traducciones
     final title = translations['services_intro_title'] as String? ?? 'Nuestros Servicios';
     final subtitle = translations['services_intro_subtitle'] as String? ?? 'Descubre cómo podemos ayudarte.';
     final buttonText = translations['contact_us_cta'] as String? ?? 'Solicitar Asesoría';
@@ -39,7 +39,7 @@ class ServicesIntroSection extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                title, // Usamos la variable traducida
+                title, 
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 32,
@@ -49,7 +49,7 @@ class ServicesIntroSection extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                subtitle, // Usamos la variable traducida
+                subtitle, 
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -64,23 +64,30 @@ class ServicesIntroSection extends StatelessWidget {
                   themeModeNotifier: ValueNotifier(Theme.of(context).brightness == Brightness.dark 
                     ? ThemeMode.dark 
                     : ThemeMode.light),
+                  // 🚨 PASAMOS EL NOTIFICADOR RECIBIDO
+                  isPausedNotifier: isPausedNotifier, 
                 ),
               ),
               
               const SizedBox(height: 24), 
 
               // BOTÓN DE SERVICIOS
-              FilledButton.tonal(
+              // 🚨 CAMBIO CLAVE: Usamos OutlinedButton en lugar de FilledButton.tonal
+              OutlinedButton(
                 onPressed: () => _handleServicesTap(context), 
-                style: FilledButton.styleFrom(
+                style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: Text(
-                  buttonText, // Usamos la variable traducida
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  buttonText, 
+                  style: TextStyle( // Aseguramos que el texto use el color primario
+                    fontSize: 18, 
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
                 ),
               ),
               
@@ -92,4 +99,3 @@ class ServicesIntroSection extends StatelessWidget {
     );
   }
 }
-// 🚨 NOTA: Se asume que ReliefPointCloudAnimation y ReliefPainter existen en otro archivo.
