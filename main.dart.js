@@ -86520,9 +86520,9 @@ if(i==null)i="Publicaciones para la miner\xeda del ma\xf1ana"
 s=A.ak(n.h(0,"publishings_main_subtitle"))
 if(s==null)s="Conoce nuestra participaci\xf3n en el desarrollo tecnol\xf3gico del futuro."
 r=A.d1(12)
-q=A.ay4(j.b,1)
-p=j.k3
-return new A.b_(new A.ah(16,l,16,l),A.eA(new A.eg(B.cB,A.cy(o,A.c_(A.b([A.bg(i,o,o,o,A.cK(o,o,p,o,o,o,o,o,o,o,o,32,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),B.aa,o),B.bm,A.bg(s,o,o,o,A.cK(o,o,p,o,o,o,o,o,o,o,o,18,o,o,o,o,o,!0,o,o,o,o,o,o,o,o),B.aa,o),B.lk,new A.Uf(n,j,o)],t.p),B.x,B.A,B.y),B.r,o,o,new A.ef(o,o,q,r,o,o,B.bg),o,o,o,new A.ah(k,k,k,k),o,o,o),o),o,o),o)}}
+q=j.b
+p=A.ay4(q,1)
+return new A.b_(new A.ah(16,l,16,l),A.eA(new A.eg(B.cB,A.cy(o,A.c_(A.b([A.bg(i,o,o,o,A.cK(o,o,q,o,o,o,o,o,o,o,o,32,o,o,B.a2,o,o,!0,o,o,o,o,o,o,o,o),B.aa,o),B.bm,A.bg(s,o,o,o,A.cK(o,o,j.k3,o,o,o,o,o,o,o,o,18,o,o,o,o,o,!0,o,o,o,o,o,o,o,o),B.aa,o),B.lk,new A.Uf(n,j,o)],t.p),B.x,B.A,B.y),B.r,o,o,new A.ef(o,o,p,r,o,o,B.bg),o,o,o,new A.ah(k,k,k,k),o,o,o),o),o,o),o)}}
 A.Uf.prototype={
 J(a){var s,r,q,p,o,n,m,l,k,j=null,i=A.aX(a,j,t.w).w.a.a>900,h=this.c,g=A.ak(h.h(0,"publishings_content_title"))
 if(g==null)g="Liderando la innovaci\xf3n en Miner\xeda 4.0"
