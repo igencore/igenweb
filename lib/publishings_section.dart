@@ -1,4 +1,4 @@
-// Archivo: lib/publishings_section.dart (TÍTULOS CON COLORES FIJOS DE ALTO CONTRASTE)
+// Archivo: lib/publishings_section.dart (TÍTULOS CON COLORES CONDICIONALES POR PLATAFORMA)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; 
@@ -50,15 +50,15 @@ class PublishingsSection extends StatelessWidget {
             padding: EdgeInsets.all(innerPadding),
             child: Column(
               children: [
-                // Título principal de la sección
+                // Título principal de la sección: "Publicaciones para la minería del mañana"
                 Text(
                   mainTitle,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    // 🚨 CAMBIO 1: Color fijo a BLANCO (Colors.white)
-                    color: Colors.white, 
+                    // 🚨 CAMBIO 1: Desktop usa colorScheme.primary (azul profundo). Mobile usa blanco (alto contraste).
+                    color: isDesktop ? colorScheme.primary : Colors.white, 
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -111,15 +111,15 @@ class _PublishingsContent extends StatelessWidget {
         crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Título (secundario)
+          // Título (secundario): "Liderando la innovación en Minería 4.0"
           Text(
             contentTitle,
             textAlign: isDesktop ? TextAlign.left : TextAlign.center,
             style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              // 🚨 CAMBIO 2: Color fijo a AMARILLO brillante (Colors.amber)
-              color: Colors.amber, 
+              // 🚨 CAMBIO 2: Color fijo a CELESTE (Colors.lightBlue) para ambos.
+              color: Colors.lightBlue, 
             ),
           ),
           const SizedBox(height: 16),
