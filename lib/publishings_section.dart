@@ -1,4 +1,4 @@
-// Archivo: lib/publishings_section.dart (RENOMBRADO Y CORREGIDO PARA EL BOTÓN)
+// Archivo: lib/publishings_section.dart (TÍTULO PRINCIPAL CON MAYOR CONTRASTE)
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart'; 
@@ -57,7 +57,8 @@ class PublishingsSection extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
+                    // 🚨 CAMBIO CLAVE: Usamos colorScheme.primary para el acento y contraste
+                    color: colorScheme.primary,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -87,6 +88,7 @@ class PublishingsSection extends StatelessWidget {
 
 // Widget interno que contiene las dos columnas y maneja la adaptación
 class _PublishingsContent extends StatelessWidget {
+// ... (código interno _PublishingsContent y FadeSliderCard sin cambios)
   final Map<String, dynamic> publishingsText; 
   final ColorScheme colorScheme;
 
