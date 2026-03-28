@@ -19,8 +19,93 @@
 </script>
 
 <svelte:head>
-	<title>iGenCore - {currentLang === 'ES' ? 'Excelencia Operacional en Minería' : 'Mining Operational Excellence'}</title>
-	<meta name="description" content={currentLang === 'ES' ? 'Impulsamos la eficiencia y la sostenibilidad en cada proceso.' : 'Driving efficiency and sustainability in every process.'} />
+	<title>{currentLang === 'ES' ? 'iGenCore | Excelencia Operacional en Minería Chile' : 'iGenCore | Mining Operational Excellence Chile'}</title>
+	<meta name="description" content={currentLang === 'ES'
+		? 'iGenCore: empresa chilena de ingeniería minera especializada en geometalurgia, flotación, automatización, metalmetánica y transporte de fluidos. Soluciones integrales para la minería.'
+		: 'iGenCore: Chilean mining engineering company specializing in geometallurgy, flotation, automation, metal-mechanics and fluid transport. Comprehensive solutions for mining.'} />
+	<meta name="keywords" content={currentLang === 'ES'
+		? 'ingeniería minera Chile, geometalurgia, flotación minerales, automatización minera, metalmetánica, transporte fluidos minería, iGenCore'
+		: 'mining engineering Chile, geometallurgy, mineral flotation, mining automation, metal mechanics, fluid transport mining, iGenCore'} />
+	<link rel="canonical" href="https://igencore.github.io/igenweb/" />
+	<!-- Open Graph -->
+	<meta property="og:title" content={currentLang === 'ES' ? 'iGenCore | Excelencia Operacional en Minería Chile' : 'iGenCore | Mining Operational Excellence Chile'} />
+	<meta property="og:description" content={currentLang === 'ES'
+		? 'Empresa chilena de ingeniería minera: geometalurgia, flotación, automatización, metalmetánica y transporte de fluidos.'
+		: 'Chilean mining engineering company: geometallurgy, flotation, automation, metal-mechanics and fluid transport.'} />
+	<meta property="og:url" content="https://igencore.github.io/igenweb/" />
+	<!-- Twitter -->
+	<meta name="twitter:title" content={currentLang === 'ES' ? 'iGenCore | Excelencia Operacional en Minería Chile' : 'iGenCore | Mining Operational Excellence Chile'} />
+	<meta name="twitter:description" content={currentLang === 'ES'
+		? 'Empresa chilena de ingeniería minera: geometalurgia, flotación, automatización y más.'
+		: 'Chilean mining engineering company: geometallurgy, flotation, automation and more.'} />
+</svelte:head>
+
+<!-- Schema.org JSON-LD: Organization + datos estructurados para Google -->
+<svelte:head>
+	{@html `<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "Organization",
+		"name": "iGenCore",
+		"url": "https://igencore.github.io/igenweb/",
+		"logo": "https://igencore.github.io/igenweb/images/logoigenblack.png",
+		"description": "Empresa chilena de ingeniería minera especializada en geometalurgia, flotación, automatización industrial, metalmetánica y transporte de fluidos.",
+		"foundingDate": "2021",
+		"address": {
+			"@type": "PostalAddress",
+			"addressCountry": "CL",
+			"addressRegion": "Chile"
+		},
+		"contactPoint": {
+			"@type": "ContactPoint",
+			"contactType": "customer service",
+			"email": "info@igencore.cl",
+			"telephone": "+56974591433",
+			"availableLanguage": ["Spanish", "English"]
+		},
+		"sameAs": [
+			"https://www.linkedin.com/company/igencore"
+		],
+		"hasOfferCatalog": {
+			"@type": "OfferCatalog",
+			"name": "Servicios de Ingeniería Minera",
+			"itemListElement": [
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "Service",
+						"name": "Geometalurgia y Procesamiento de Minerales",
+						"description": "Soluciones en geometalurgia, flotación y procesamiento de minerales para la industria minera."
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "Service",
+						"name": "Transporte de Fluidos",
+						"description": "Ingeniería y diseño de sistemas de transporte de fluidos para procesos mineros."
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "Service",
+						"name": "Metalmecánica Industrial",
+						"description": "Fabricación y mantenimiento metalmecánico para la industria minera."
+					}
+				},
+				{
+					"@type": "Offer",
+					"itemOffered": {
+						"@type": "Service",
+						"name": "Automatización de Procesos",
+						"description": "Automatización industrial y control de procesos para operaciones mineras."
+					}
+				}
+			]
+		}
+	}
+	<\/script>`}
 </svelte:head>
 
 <!-- Hero: el componente maneja su propio fondo azul profundo -->

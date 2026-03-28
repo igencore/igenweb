@@ -17,8 +17,19 @@
 </script>
 
 <svelte:head>
-	<title>iGenCore - {title}</title>
+	<title>{title} | iGenCore - Ingeniería Minera Chile</title>
 	<meta name="description" content={summary} />
+	<meta name="keywords" content={`${title}, iGenCore, ingeniería minera Chile, servicios mineros`} />
+	<link rel="canonical" href={`https://igencore.github.io/igenweb/services/${service?.id}`} />
+	<meta property="og:title" content={`${title} | iGenCore`} />
+	<meta property="og:description" content={summary} />
+	<meta property="og:url" content={`https://igencore.github.io/igenweb/services/${service?.id}`} />
+	{#if service?.image}
+	<meta property="og:image" content={`https://igencore.github.io/igenweb/images/${service.image}`} />
+	<meta name="twitter:image" content={`https://igencore.github.io/igenweb/images/${service.image}`} />
+	{/if}
+	<meta name="twitter:title" content={`${title} | iGenCore`} />
+	<meta name="twitter:description" content={summary} />
 </svelte:head>
 
 {#if service}

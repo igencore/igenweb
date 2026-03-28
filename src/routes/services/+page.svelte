@@ -25,8 +25,23 @@
 </script>
 
 <svelte:head>
-	<title>iGenCore - {t(currentLang, 'nav.services')}</title>
-	<meta name="description" content={t(currentLang, 'services_intro.subtitle')} />
+	<title>{currentLang === 'ES' ? 'Servicios de Ingeniería Minera | iGenCore Chile' : 'Mining Engineering Services | iGenCore Chile'}</title>
+	<meta name="description" content={currentLang === 'ES'
+		? 'Servicios especializados de iGenCore: geometalurgia, flotación de minerales, transporte de fluidos, metalmetánica, automatización industrial y monitoreo. Soluciones para la minería chilena.'
+		: 'iGenCore specialized services: geometallurgy, mineral flotation, fluid transport, metal-mechanics, industrial automation and monitoring. Solutions for Chilean mining.'} />
+	<meta name="keywords" content={currentLang === 'ES'
+		? 'servicios ingeniería minera Chile, geometalurgia, flotación minerales, transporte fluidos, metalmetánica, automatización industrial, monitoreo minero'
+		: 'mining engineering services Chile, geometallurgy, mineral flotation, fluid transport, metal-mechanics, industrial automation, mining monitoring'} />
+	<link rel="canonical" href="https://igencore.github.io/igenweb/services" />
+	<meta property="og:title" content={currentLang === 'ES' ? 'Servicios de Ingeniería Minera | iGenCore Chile' : 'Mining Engineering Services | iGenCore Chile'} />
+	<meta property="og:description" content={currentLang === 'ES'
+		? 'Geometalurgia, flotación, automatización, metalmetánica y más. Soluciones integrales para la minería.'
+		: 'Geometallurgy, flotation, automation, metal-mechanics and more. Comprehensive mining solutions.'} />
+	<meta property="og:url" content="https://igencore.github.io/igenweb/services" />
+	<meta name="twitter:title" content={currentLang === 'ES' ? 'Servicios Mineros | iGenCore' : 'Mining Services | iGenCore'} />
+	<meta name="twitter:description" content={currentLang === 'ES'
+		? 'Soluciones integrales de ingeniería para la industria minera chilena.'
+		: 'Comprehensive engineering solutions for the Chilean mining industry.'} />
 </svelte:head>
 
 <!-- Bloque continuo: título + animación + cards sin corte -->

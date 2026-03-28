@@ -11,8 +11,27 @@
 </script>
 
 <svelte:head>
-	<title>iGenCore - {t(currentLang, 'about.title')}</title>
-	<meta name="description" content={t(currentLang, 'about.subtitle')} />
+	<title>{currentLang === 'ES' ? 'Quiénes Somos | iGenCore - Ingeniería Minera Chile' : 'About Us | iGenCore - Mining Engineering Chile'}</title>
+	<meta name="description" content={currentLang === 'ES'
+		? 'Conoce iGenCore: empresa chilena fundada en 2021, especializada en soluciones integrales para la industria minera. Misión, visión y propósito de nuestro equipo multidisciplinario.'
+		: 'Learn about iGenCore: Chilean company founded in 2021, specialized in comprehensive solutions for the mining industry. Mission, vision and purpose of our multidisciplinary team.'} />
+	<meta name="keywords" content={currentLang === 'ES'
+		? 'iGenCore empresa minera Chile, ingeniería metalurgia geología, empresa minera 2021, quiénes somos iGenCore'
+		: 'iGenCore mining company Chile, engineering metallurgy geology, mining company 2021, about iGenCore'} />
+	<link rel="canonical" href="https://igencore.github.io/igenweb/about" />
+	<!-- Open Graph -->
+	<meta property="og:title" content={currentLang === 'ES' ? 'Quiénes Somos | iGenCore - Ingeniería Minera Chile' : 'About Us | iGenCore - Mining Engineering Chile'} />
+	<meta property="og:description" content={currentLang === 'ES'
+		? 'Empresa chilena fundada en 2021 con soluciones en geometalurgia, automatización y procesamiento de minerales.'
+		: 'Chilean company founded in 2021 with solutions in geometallurgy, automation and mineral processing.'} />
+	<meta property="og:url" content="https://igencore.github.io/igenweb/about" />
+	<meta property="og:image" content="https://igencore.github.io/igenweb/images/about_mision_vision.jpg" />
+	<!-- Twitter -->
+	<meta name="twitter:title" content={currentLang === 'ES' ? 'Quiénes Somos | iGenCore' : 'About Us | iGenCore'} />
+	<meta name="twitter:description" content={currentLang === 'ES'
+		? 'Empresa chilena de ingeniería minera fundada en 2021. Misión, visión y propósito.'
+		: 'Chilean mining engineering company founded in 2021. Mission, vision and purpose.'} />
+	<meta name="twitter:image" content="https://igencore.github.io/igenweb/images/about_mision_vision.jpg" />
 </svelte:head>
 
 <!-- Hero con imagen full — título superpuesto, al estilo banner -->

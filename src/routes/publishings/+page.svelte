@@ -12,8 +12,23 @@
 </script>
 
 <svelte:head>
-	<title>iGenCore - {t(currentLang, 'nav.publishings')}</title>
-	<meta name="description" content={t(currentLang, 'publishings_intro.main_subtitle')} />
+	<title>{currentLang === 'ES' ? 'Publicaciones Científicas en Minería | iGenCore Chile' : 'Scientific Publications in Mining | iGenCore Chile'}</title>
+	<meta name="description" content={currentLang === 'ES'
+		? 'Publicaciones científicas e insights del sector minero por iGenCore. Investigación en materiales, optimización de procesos y algoritmos de IA para minería sostenible.'
+		: 'Scientific publications and mining sector insights by iGenCore. Research in materials, process optimization and AI algorithms for sustainable mining.'} />
+	<meta name="keywords" content={currentLang === 'ES'
+		? 'publicaciones minería Chile, investigación minera, Minería 4.0, IA minería, innovación minera iGenCore'
+		: 'mining publications Chile, mining research, Mining 4.0, AI mining, iGenCore mining innovation'} />
+	<link rel="canonical" href="https://igencore.github.io/igenweb/publishings" />
+	<meta property="og:title" content={currentLang === 'ES' ? 'Publicaciones Científicas en Minería | iGenCore' : 'Scientific Publications in Mining | iGenCore'} />
+	<meta property="og:description" content={currentLang === 'ES'
+		? 'Investigación y publicaciones científicas sobre minería sostenible y Minería 4.0.'
+		: 'Research and scientific publications on sustainable mining and Mining 4.0.'} />
+	<meta property="og:url" content="https://igencore.github.io/igenweb/publishings" />
+	<meta name="twitter:title" content={currentLang === 'ES' ? 'Publicaciones Mineras | iGenCore' : 'Mining Publications | iGenCore'} />
+	<meta name="twitter:description" content={currentLang === 'ES'
+		? 'Investigación científica en minería sostenible y tecnología industrial.'
+		: 'Scientific research in sustainable mining and industrial technology.'} />
 </svelte:head>
 
 <!-- Hero con imagen full-bleed y título superpuesto -->
