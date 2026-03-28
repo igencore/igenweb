@@ -1,6 +1,4 @@
-# Archivo: .github/workflows/deploy.yml
-
-name: Deploy Flutter Web App
+name: Deploy SvelteKit to GitHub Pages
 
 on:
   push:
@@ -8,28 +6,28 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: 'stable'
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
 
-      - name: Get Flutter dependencies
-        run: flutter pub get
+      - name: Install dependencies
+        run: bun install
 
-      - name: Build Flutter web app
-        # Eliminamos --web-renderer canvaskit
-        run: flutter build web --base-href /igenweb/
+      - name: Build SvelteKit app
+        run: bun run build
+        env:
+          NODE_ENV: production
+          VITE_POCKETBASE_URL: ${{ secrets.VITE_POCKETBASE_URL }}
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: gh-pages
-          folder: build/web
+          folder: build

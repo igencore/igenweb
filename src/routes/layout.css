@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/* Tailwind v4: colores custom via @theme */
+@theme {
+	--color-primary-celeste: #1671d8;
+	--color-secondary-azulprofundo: #0f2c65;
+	--color-accent-amarillo: #f6bd20;
+	--color-button-bg: #ffeb3b;
+	--color-light-body: #f4f7fb;
+	--color-light-card: #ffffff;
+	--color-light-section-alt: #eef2f8;
+	--color-text-primary: #1a2a4a;
+	--color-text-secondary: #4a6080;
+
+	--font-family-sans: 'Lato', sans-serif;
+}
+
+/* Tailwind v4: dark mode via selector .dark en <html> */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+	* {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		font-family: var(--font-family-sans);
+		/* Light mode as default */
+		background-color: var(--color-light-body);
+		color: var(--color-text-primary);
+		transition: background-color 0.3s, color 0.3s;
+	}
+
+	main {
+		min-height: calc(100vh - 4rem);
+	}
+}
