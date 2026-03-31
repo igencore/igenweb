@@ -18,25 +18,84 @@
 
 	let currentSlide = $state(0);
 	let currentLang = $state('ES');
+	let textVisible = $state(true);  // controla el fade del texto
 
 	languageStore.subscribe((value) => {
 		currentLang = value;
 	});
 
+	// Texto actualmente mostrado (se actualiza solo cuando el texto está invisible)
+	let displayedSlogan = $state(
+		currentLang === 'ES' ? slides[0].sloganES : slides[0].sloganEN
+	);
+
+	// Duración del fade de texto en ms
+	const TEXT_FADE_MS = 400;
+
+	async function goToSlide(index) {
+		if (index === currentSlide) return;
+
+		// 1. Fade out del texto
+		textVisible = false;
+
+		// 2. Esperar a que termine el fade out, luego cambiar imagen y texto
+		await new Promise(r => setTimeout(r, TEXT_FADE_MS));
+		currentSlide = index;
+		displayedSlogan = currentLang === 'ES' ? slides[index].sloganES : slides[index].sloganEN;
+
+		// 3. Fade in del texto
+		textVisible = true;
+	}
+
+	// Sincronizar displayedSlogan cuando cambia el idioma
+	$effect(() => {
+		displayedSlogan = currentLang === 'ES'
+			? slides[currentSlide].sloganES
+			: slides[currentSlide].sloganEN;
+	});
+
+	// Avance automático
 	onMount(() => {
 		const interval = setInterval(() => {
-			currentSlide = (currentSlide + 1) % slides.length;
+			goToSlide((currentSlide + 1) % slides.length);
 		}, 6000);
 		return () => clearInterval(interval);
 	});
 
-	const goToSlide = (index) => { currentSlide = index; };
+	// Swipe touch support
+	let touchStartX = 0;
+	let touchStartY = 0;
+
+	function onTouchStart(e) {
+		touchStartX = e.touches[0].clientX;
+		touchStartY = e.touches[0].clientY;
+	}
+
+	function onTouchEnd(e) {
+		const dx = e.changedTouches[0].clientX - touchStartX;
+		const dy = e.changedTouches[0].clientY - touchStartY;
+
+		// Solo activar si el movimiento horizontal supera 50px y es más horizontal que vertical
+		if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+			if (dx < 0) {
+				// Swipe izquierda → siguiente
+				goToSlide((currentSlide + 1) % slides.length);
+			} else {
+				// Swipe derecha → anterior
+				goToSlide((currentSlide - 1 + slides.length) % slides.length);
+			}
+		}
+	}
 </script>
 
-<!-- Hero — imagen full width con slogan overlay, estilo BHP -->
-<section class="relative w-full h-[520px] md:h-[620px] overflow-hidden bg-[#0f2c65]">
+<!-- Hero — imagen full width con slogan overlay -->
+<section
+	class="relative w-full h-[520px] md:h-[620px] overflow-hidden bg-[#0f2c65]"
+	ontouchstart={onTouchStart}
+	ontouchend={onTouchEnd}
+>
 
-	<!-- Slides -->
+	<!-- Slides (imágenes con fade) -->
 	{#each slides as slide, index}
 		<div
 			class="absolute inset-0 transition-opacity duration-1000 ease-in-out"
@@ -48,7 +107,6 @@
 				alt="Banner {index + 1}"
 				class="w-full h-full object-cover"
 			/>
-			<!-- Gradiente oscuro sobre la imagen para legibilidad del texto -->
 			<div class="absolute inset-0 bg-gradient-to-r from-[#0f2c65]/80 via-[#0f2c65]/40 to-transparent"></div>
 		</div>
 	{/each}
@@ -57,27 +115,16 @@
 	<div class="relative z-10 h-full flex items-center">
 		<div class="max-w-7xl mx-auto px-6 sm:px-10 w-full">
 			<div class="max-w-2xl">
-				<!-- Logo o marca opcional -->
 				<p class="text-accent-amarillo text-sm font-semibold uppercase tracking-widest mb-4">iGenCore</p>
 
-				<!-- Slogan dinámico por slide -->
-				{#each slides as slide, index}
-					<h1
-						class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6 transition-opacity duration-700"
-						class:opacity-100={currentSlide === index}
-						class:opacity-0={currentSlide !== index}
-						style="position: {currentSlide === index ? 'relative' : 'absolute'}; top: 0;"
-					>
-						{currentLang === 'ES' ? slide.sloganES : slide.sloganEN}
-					</h1>
-				{/each}
-
-				<a
-					href="{base}/services"
-					class="inline-block mt-2 px-7 py-3 bg-accent-amarillo text-black font-bold text-sm rounded hover:brightness-110 transition"
+				<!-- Slogan con fade in/out suave — una sola h1, sin saltos de posición -->
+				<h1
+					class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight mb-6"
+					style="transition: opacity {TEXT_FADE_MS}ms ease-in-out; opacity: {textVisible ? 1 : 0};"
 				>
-					{currentLang === 'ES' ? 'Descubre Nuestros Servicios' : 'Discover Our Services'}
-				</a>
+					{displayedSlogan}
+				</h1>
+
 			</div>
 		</div>
 	</div>

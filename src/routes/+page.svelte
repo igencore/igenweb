@@ -38,10 +38,7 @@
 	<meta name="twitter:description" content={currentLang === 'ES'
 		? 'Empresa chilena de ingeniería minera: geometalurgia, flotación, automatización y más.'
 		: 'Chilean mining engineering company: geometallurgy, flotation, automation and more.'} />
-</svelte:head>
-
-<!-- Schema.org JSON-LD: Organization + datos estructurados para Google -->
-<svelte:head>
+	<!-- Schema.org JSON-LD -->
 	{@html `<script type="application/ld+json">
 	{
 		"@context": "https://schema.org",
@@ -147,18 +144,11 @@
 						title={currentLang === 'ES' ? service.titleES : service.titleEN}
 						summary={currentLang === 'ES' ? service.summaryES : service.summaryEN}
 						icon={service.icon}
+						image={service.image}
 						isParent={true}
+						showImage={true}
 					/>
 				{/each}
-			</div>
-
-			<div class="text-center mt-12">
-				<a
-					href="{base}/services"
-					class="inline-block px-10 py-4 bg-accent-amarillo text-black font-bold rounded-lg hover:brightness-110 transition text-base"
-				>
-					{t(currentLang, 'services_intro.cta')}
-				</a>
 			</div>
 		</div>
 	</div>

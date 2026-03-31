@@ -16,9 +16,9 @@ export const services = [
 		titleES: 'Servicio de investigación de flotación',
 		titleEN: 'Flotation Research Service',
 		summaryES:
-			'La optimización del rendimiento metalúrgico de celdas de flotación requiere de la búsqueda de perfiles de flujo de aire y alturas de espuma a lo largo del banco que sean compatibles con las condiciones necesarias para la circulación del flujo volumétrico de alimentación. La dispersión de aire es el proceso más relevante que ocurre en máquinas de flotación. Por ende, realizamos la medición simultánea y continua del flujo de gas, densidad aparente de la pulpa, y altura de espuma, además de mediciones puntuales frecuentes de densidad de pulpa, contenido de gas, y tamaño de burbuja en todas las celdas de un banco. Los resultados obtenidos nos permiten crear líneas de base operacional en bancos de celdas del circuito de flotación, que a su vez permiten mantener a la celda en su máximo punto operacional.',
+			'La optimización del rendimiento metalúrgico de celdas de flotación requiere de la búsqueda de perfiles de flujo de aire y alturas de espuma a lo largo del banco que sean compatibles con las condiciones necesarias para la circulación del flujo volumétrico de alimentación. La dispersión de aire es el proceso más relevante que ocurre en máquinas de flotación. Por ende, diseñamos y fabricamos sensores especialmente desarrollados para medir de forma simultánea y continua el flujo de gas, densidad aparente de la pulpa, altura de espuma y tamaño de burbuja sin entorpecer la operación de las celdas. Los resultados obtenidos nos permiten crear líneas de base operacional en bancos de celdas del circuito de flotación, que a su vez permiten mantener a la celda en su máximo punto operacional.',
 		summaryEN:
-			'Optimizing the metallurgical performance of flotation cells requires finding air flow profiles and froth heights within the bank that are compatible with the necessary conditions for the circulation of the feed volumetric flow. Air dispersion is the most important process occurring in flotation machines. Therefore, we perform simultaneous and continuous measurement of gas flow, apparent density of pulp, and froth height, in addition to frequent spot measurements of pulp density, gas content, and bubble size in all cells within a bank. The results obtained allow us to create operational baselines for cell banks in the flotation circuit, which in turn allow the cell to perform at its highest operating point.',
+			'Optimizing the metallurgical performance of flotation cells requires identifying airflow profiles and froth heights along the cell bank that are compatible with the necessary conditions for the feed flow rate. Air dispersion is the most critical process occurring in flotation machines. Therefore, we designed and manufactured sensors that are specially developed to measure simultaneously and continuously gas flow, pulp density, froth height, and bubble size without disrupting the cell operation. The obtained results allow us to establish operational baselines for cell banks within the flotation circuit, which in turn enable us to maintain the cell at its optimal operating point.',
 		icon: 'insights',
 		image: 'service_flotacion.jpg',
 		parent: '1'
@@ -46,18 +46,6 @@ export const services = [
 		icon: 'science',
 		image: 'service_reactivos.jpg',
 		parent: '1'
-	},
-	{
-		id: '2',
-		titleES: 'Transporte de fluidos',
-		titleEN: 'Fluid Transportation',
-		summaryES:
-			'Manejo de fluidos mediante bombeo: contamos con altos estándares de manufacturación, ofreciendo una vasta gama de equipos de bombeo, en cualquier materialidad y para cualquier tipo de aplicación que el cliente necesite. Una vez entregado el activo, nos aseguramos de que este funcione en perfectas condiciones, asesorando su puesta en marcha, manteniendo un servicio de supervisión con tecnología de monitoreo de condiciones y manteniendo un stock de repuesto al alcance del cliente.',
-		summaryEN:
-			'Fluid handling through pumping: we maintain high manufacturing standards, offering a wide range of pumping equipment, in any material and for any type of application that clients may require. Once the asset is delivered, we ensure it operates in perfect condition, advising on its commissioning, maintaining a supervision service with condition monitoring technology, and keeping a stock of spare parts available if necessary.',
-		icon: 'waves',
-		image: 'service_transporte_fluidos.jpg',
-		parent: null
 	},
 	{
 		id: '3',
@@ -118,5 +106,17 @@ export const services = [
 		icon: 'water',
 		image: 'service_circuito_fluidos.jpg',
 		parent: '4'
+	},
+	{
+		id: '2',
+		titleES: 'Transporte de fluidos',
+		titleEN: 'Fluid Transportation',
+		summaryES:
+			'Manejo de fluidos mediante bombeo y control de flujo: contamos con altos estándares de manufacturación, ofreciendo una vasta gama de equipos de bombeo y válvulas, en cualquier materialidad y para cualquier tipo de aplicación que el cliente necesite. Nos caracterizamos por priorizar e impulsar la fabricación nacional, fomentando así la economía chilena al generar empleo, reducir la dependencia del mercado externo, y a la vez mejorar la tecnología local. Una vez entregado el activo, nos aseguramos de que este funcione en perfectas condiciones, asesorando su puesta en marcha, manteniendo un servicio de supervisión con tecnología de monitoreo de condiciones y manteniendo un stock de repuesto al alcance del cliente.',
+		summaryEN:
+			'Fluid handling through pumping and flow control: We maintain high manufacturing standards, offering a wide range of pumping equipment and valves, in any material and for any application the customer may need. We are characterized by prioritizing and promoting national manufacturing, thus fostering the Chilean economy by generating employment, reducing dependence on the foreign market, and simultaneously improving local technology. Once the asset is delivered, we ensure that it functions perfectly, advising on its commissioning, maintaining a monitoring service with condition monitoring technology, and keeping a spare parts inventory readily available to the customer.',
+		icon: 'waves',
+		image: 'service_transporte_fluidos.jpg',
+		parent: null
 	}
 ];
