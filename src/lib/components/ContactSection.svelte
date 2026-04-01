@@ -17,18 +17,7 @@
 		isSubmitting = true;
 		submitStatus = null;
 
-		const pocketbaseUrl = import.meta.env.VITE_POCKETBASE_URL;
-
-		if (!pocketbaseUrl) {
-			submitStatus = {
-				type: 'warning',
-				message: currentLang === 'ES'
-					? 'El servidor de correo no está configurado aún.'
-					: 'Email server is not configured yet.'
-			};
-			isSubmitting = false;
-			return;
-		}
+		const pocketbaseUrl = 'https://pb-shared-argos.exosfera.org';
 
 		try {
 			const response = await fetch(`${pocketbaseUrl}/api/collections/igencore_contacts/records`, {
