@@ -141,6 +141,7 @@
 				{#each mainServices as service}
 					<ServiceCard
 						id={service.id}
+						slug={service.slug}
 						title={currentLang === 'ES' ? service.titleES : service.titleEN}
 						summary={currentLang === 'ES' ? service.summaryES : service.summaryEN}
 						icon={service.icon}

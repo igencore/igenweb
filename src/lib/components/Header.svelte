@@ -151,7 +151,7 @@
 									<div class="mb-4">
 										<!-- Servicio padre -->
 										<a
-											href="{base}/services/{group.id}"
+											href="{base}/services/{group.slug}"
 											onclick={() => servicesMegaOpen = false}
 											class="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold text-sm text-secondary-azulprofundo hover:bg-[#eef2f8] hover:text-primary-celeste transition group"
 											role="menuitem"
@@ -165,7 +165,7 @@
 											<div class="ml-4 mt-0.5 space-y-0.5 border-l-2 border-[#e0e8f0] pl-3">
 												{#each group.children as child}
 													<a
-														href="{base}/services/{child.id}"
+														href="{base}/services/{child.slug}"
 														onclick={() => servicesMegaOpen = false}
 														class="flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs text-[#4a6080] hover:text-primary-celeste hover:bg-[#f0f5fb] transition"
 														role="menuitem"
@@ -274,7 +274,7 @@
 				<div class="space-y-0.5">
 					{#each serviceGroups as group}
 						<a
-							href="{base}/services/{group.id}"
+							href="{base}/services/{group.slug}"
 							onclick={closeMobileMenu}
 							class="flex items-center gap-2 py-2 px-2 text-sm font-semibold text-secondary-azulprofundo hover:text-primary-celeste rounded-lg hover:bg-[#f0f5fb] transition border-b border-[#f0f4f8]"
 						>
@@ -283,7 +283,7 @@
 						</a>
 						{#each group.children as child}
 							<a
-								href="{base}/services/{child.id}"
+								href="{base}/services/{child.slug}"
 								onclick={closeMobileMenu}
 								class="flex items-center gap-2 py-1.5 pl-7 text-xs text-[#4a6080] hover:text-primary-celeste rounded hover:bg-[#f0f5fb] transition"
 							>

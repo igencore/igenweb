@@ -1,6 +1,7 @@
 export const services = [
 	{
 		id: '1',
+		slug: 'geometallurgy',
 		titleES: 'Geometalurgia',
 		titleEN: 'Geometallurgy',
 		summaryES:
@@ -13,6 +14,7 @@ export const services = [
 	},
 	{
 		id: '1a',
+		slug: 'flotationresearch',
 		titleES: 'Servicio de investigación de flotación',
 		titleEN: 'Flotation Research Service',
 		summaryES:
@@ -25,6 +27,7 @@ export const services = [
 	},
 	{
 		id: '1b',
+		slug: 'clayanalysis',
 		titleES: 'Modelamiento y análisis de arcillas',
 		titleEN: 'Clay minerals modeling and analysis',
 		summaryES:
@@ -37,6 +40,7 @@ export const services = [
 	},
 	{
 		id: '1c',
+		slug: 'reagentanalysis',
 		titleES: 'Análisis de reactivos',
 		titleEN: 'Reagent Analysis',
 		summaryES:
@@ -49,6 +53,7 @@ export const services = [
 	},
 	{
 		id: '3',
+		slug: 'metalparts',
 		titleES: 'Metalmecánica',
 		titleEN: 'Metal Parts Scanning',
 		summaryES:
@@ -61,6 +66,7 @@ export const services = [
 	},
 	{
 		id: '4',
+		slug: 'processautomation',
 		titleES: 'Automatización de procesos',
 		titleEN: 'Process Automation',
 		summaryES:
@@ -73,6 +79,7 @@ export const services = [
 	},
 	{
 		id: '4a',
+		slug: 'automaticlubrication',
 		titleES: 'Lubricación automática',
 		titleEN: 'Automatic Lubrication',
 		summaryES:
@@ -85,6 +92,7 @@ export const services = [
 	},
 	{
 		id: '4b',
+		slug: 'monitoringtechnology',
 		titleES: 'Tecnología de monitoreo',
 		titleEN: 'Monitoring Technology',
 		summaryES:
@@ -97,6 +105,7 @@ export const services = [
 	},
 	{
 		id: '4c',
+		slug: 'fluidcircuitdesign',
 		titleES: 'Diseño y fabricación de circuito de fluidos',
 		titleEN: 'Fluid Circuit Design and Manufacturing',
 		summaryES:
@@ -109,6 +118,7 @@ export const services = [
 	},
 	{
 		id: '2',
+		slug: 'fluidtransportation',
 		titleES: 'Transporte de fluidos',
 		titleEN: 'Fluid Transportation',
 		summaryES:

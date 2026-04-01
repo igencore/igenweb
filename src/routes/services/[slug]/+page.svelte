@@ -11,7 +11,7 @@
 		currentLang = value;
 	});
 
-	let service = $derived(services.find((s) => s.id === $page.params.id));
+	let service = $derived(services.find((s) => s.slug === $page.params.slug));
 	let title = $derived(service ? (currentLang === 'ES' ? service.titleES : service.titleEN) : '');
 	let summary = $derived(service ? (currentLang === 'ES' ? service.summaryES : service.summaryEN) : '');
 
@@ -73,10 +73,10 @@
 	<title>{title} | iGenCore - Ingeniería Minera Chile</title>
 	<meta name="description" content={summary} />
 	<meta name="keywords" content={`${title}, iGenCore, ingeniería minera Chile, servicios mineros`} />
-	<link rel="canonical" href={`https://igencore.github.io/igenweb/services/${service?.id}`} />
+	<link rel="canonical" href={`https://igencore.github.io/igenweb/services/${service?.slug}`} />
 	<meta property="og:title" content={`${title} | iGenCore`} />
 	<meta property="og:description" content={summary} />
-	<meta property="og:url" content={`https://igencore.github.io/igenweb/services/${service?.id}`} />
+	<meta property="og:url" content={`https://igencore.github.io/igenweb/services/${service?.slug}`} />
 	{#if service?.image}
 	<meta property="og:image" content={`https://igencore.github.io/igenweb/images/${service.image}`} />
 	<meta name="twitter:image" content={`https://igencore.github.io/igenweb/images/${service.image}`} />
@@ -95,7 +95,7 @@
 				</a>
 				<span>›</span>
 				{#if parentService}
-					<a href="{base}/services/{parentService.id}" class="hover:text-primary-celeste transition text-primary-celeste font-medium">
+					<a href="{base}/services/{parentService.slug}" class="hover:text-primary-celeste transition text-primary-celeste font-medium">
 						{parentTitle}
 					</a>
 					<span>›</span>
@@ -190,7 +190,7 @@
 						{#each subServices as sub}
 							{@const subTitle = currentLang === 'ES' ? sub.titleES : sub.titleEN}
 							{@const subSummary = currentLang === 'ES' ? sub.summaryES : sub.summaryEN}
-							<a href="{base}/services/{sub.id}" class="block group">
+							<a href="{base}/services/{sub.slug}" class="block group">
 								<div class="bg-white border border-[#d0dce8] rounded-xl overflow-hidden hover:shadow-md hover:border-primary-celeste transition-all duration-200 h-full flex flex-col">
 									{#if sub.image}
 										<div class="w-full h-40 overflow-hidden flex-shrink-0">

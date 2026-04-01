@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 	import { languageStore } from '$lib/stores/language.js';
 
-	let { id = '', title = '', summary = '', icon = '', image = '', isParent = false, isSubService = false, showImage = false } = $props();
+	let { id = '', slug = '', title = '', summary = '', icon = '', image = '', isParent = false, isSubService = false, showImage = false } = $props();
 
 	let currentLang = $state('ES');
 
@@ -11,7 +11,7 @@
 	});
 </script>
 
-<a href="{base}/services/{id}" class="block h-full">
+<a href="{base}/services/{slug}" class="block h-full">
 	<div
 		class="rounded-xl border transition-all duration-300 cursor-pointer h-full flex flex-col hover:shadow-md overflow-hidden"
 		class:border-primary-celeste={isParent}
