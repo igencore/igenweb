@@ -6,6 +6,7 @@
 	import { languageStore } from '$lib/stores/language.js';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import { base } from '$app/paths';
 
 	let { children } = $props();
 
@@ -37,6 +38,11 @@
 		href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap"
 		rel="stylesheet"
 	/>
+
+	<!-- Favicon -->
+	<link rel="icon" href="{base}/favicon.ico" sizes="any" />
+	<link rel="icon" href="{base}/favicon.png" type="image/png" sizes="32x32" />
+	<link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
 
 	<!-- Meta tags globales -->
 	<meta charset="utf-8" />

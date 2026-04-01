@@ -87,7 +87,6 @@
 <!-- Hero — imagen full width con slogan overlay -->
 <section
 	class="relative w-full h-[520px] md:h-[620px] overflow-hidden bg-[#0f2c65]"
-	role="region"
 	aria-label="Hero slider"
 	ontouchstart={onTouchStart}
 	ontouchend={onTouchEnd}
