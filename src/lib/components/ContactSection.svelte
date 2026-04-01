@@ -113,7 +113,7 @@
 						rows="5"
 						placeholder={t(currentLang, 'contact.form_message_label')}
 						class="w-full px-4 py-3 border border-[#c0cfe0] rounded-lg bg-white text-[#1a2a4a] placeholder-[#8a9ab0] focus:ring-2 focus:ring-primary-celeste focus:border-transparent outline-none resize-none"
-					/>
+					></textarea>
 				</div>
 
 				{#if submitStatus}

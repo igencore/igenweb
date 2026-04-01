@@ -74,5 +74,5 @@
 		bind:this={canvas}
 		class="w-full h-full"
 		style="display: block;"
-	/>
+	></canvas>
 </div>

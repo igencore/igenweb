@@ -140,6 +140,7 @@
 						onmouseenter={cancelClose}
 						onmouseleave={closeMegaMenuDelayed}
 						role="menu"
+						tabindex="-1"
 					>
 						<!-- Punta decorativa -->
 						<div class="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-t border-l border-[#e0e8f0] rotate-45"></div>

@@ -18,16 +18,15 @@
 
 	let currentSlide = $state(0);
 	let currentLang = $state('ES');
-	let textVisible = $state(true);  // controla el fade del texto
+	let textVisible = $state(true);
 
 	languageStore.subscribe((value) => {
 		currentLang = value;
 	});
 
 	// Texto actualmente mostrado (se actualiza solo cuando el texto está invisible)
-	let displayedSlogan = $state(
-		currentLang === 'ES' ? slides[0].sloganES : slides[0].sloganEN
-	);
+	// Usamos $derived para que capture cambios reactivos de currentLang
+	let displayedSlogan = $state(slides[0].sloganES);
 
 	// Duración del fade de texto en ms
 	const TEXT_FADE_MS = 400;
@@ -75,13 +74,10 @@
 		const dx = e.changedTouches[0].clientX - touchStartX;
 		const dy = e.changedTouches[0].clientY - touchStartY;
 
-		// Solo activar si el movimiento horizontal supera 50px y es más horizontal que vertical
 		if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
 			if (dx < 0) {
-				// Swipe izquierda → siguiente
 				goToSlide((currentSlide + 1) % slides.length);
 			} else {
-				// Swipe derecha → anterior
 				goToSlide((currentSlide - 1 + slides.length) % slides.length);
 			}
 		}
@@ -91,6 +87,8 @@
 <!-- Hero — imagen full width con slogan overlay -->
 <section
 	class="relative w-full h-[520px] md:h-[620px] overflow-hidden bg-[#0f2c65]"
+	role="region"
+	aria-label="Hero slider"
 	ontouchstart={onTouchStart}
 	ontouchend={onTouchEnd}
 >
@@ -136,7 +134,7 @@
 				onclick={() => goToSlide(index)}
 				class="w-3 h-3 rounded-full transition-all {currentSlide === index ? 'bg-accent-amarillo scale-110' : 'bg-white/50 hover:bg-white/80'}"
 				aria-label="Ir a slide {index + 1}"
-			/>
+			></button>
 		{/each}
 	</div>
 

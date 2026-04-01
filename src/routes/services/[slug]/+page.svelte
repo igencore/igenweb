@@ -240,8 +240,10 @@
 		class="fixed inset-0 z-50 flex items-center justify-center"
 		style="background: rgba(10,20,45,0.92);"
 		onclick={closeModal}
+		onkeydown={(e) => e.key === 'Escape' && closeModal()}
 		role="dialog"
 		aria-modal="true"
+		tabindex="-1"
 	>
 		<!-- Contenedor de la foto (detiene el click para no cerrar) -->
 		<div
