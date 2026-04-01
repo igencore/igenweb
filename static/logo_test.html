@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { background: white; display: flex; flex-direction: column; gap: 20px; padding: 20px; font-family: sans-serif; }
+    .row { display: flex; align-items: center; gap: 20px; }
+    label { font-size: 12px; color: #666; width: 180px; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; }
+    input[type=range] { width: 120px; }
+  </style>
+</head>
+<body>
+  <h3>Logo SVG tester — ajusta hasta que el globo encaje en la "o"</h3>
+  
+  <!-- Logo PNG original para comparar -->
+  <div class="row">
+    <label>Original PNG (171px):</label>
+    <img src="logoigenblack.png" style="height:44px; filter: brightness(0) invert(41%) sepia(25%) hue-rotate(178deg) saturate(377%) brightness(75%);">
+  </div>
+  
+  <!-- SVG dinámico -->
+  <div class="row">
+    <label>SVG generado (h-11):</label>
+    <svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 72" height="44" style="overflow:visible">
+      <text y="56"
+        font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="56" font-weight="400"
+        fill="#1a3a6a" xml:space="preserve"
+        id="txt"><tspan>IgEnC</tspan><tspan fill="transparent">o</tspan><tspan>re</tspan></text>
+      <g id="globe" transform="translate(181, 4) scale(1.72)">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="#1a3a6a"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- Controles -->
+  <div class="controls">
+    <div>
+      <label>Globo X: <span id="gx_val">181</span></label><br>
+      <input type="range" id="gx" min="140" max="230" value="181" oninput="update()">
+    </div>
+    <div>
+      <label>Globo Y: <span id="gy_val">4</span></label><br>
+      <input type="range" id="gy" min="-10" max="20" value="4" oninput="update()">
+    </div>
+    <div>
+      <label>Globo Scale: <span id="gs_val">1.72</span></label><br>
+      <input type="range" id="gs" min="1.2" max="2.4" step="0.02" value="1.72" oninput="update()">
+    </div>
+  </div>
+  
+  <pre id="output" style="background:#f0f0f0; padding:10px; font-size:12px;"></pre>
+
+  <script>
+    function update() {
+      const gx = document.getElementById('gx').value;
+      const gy = document.getElementById('gy').value;
+      const gs = document.getElementById('gs').value;
+      document.getElementById('gx_val').textContent = gx;
+      document.getElementById('gy_val').textContent = gy;
+      document.getElementById('gs_val').textContent = gs;
+      document.getElementById('globe').setAttribute('transform', `translate(${gx}, ${gy}) scale(${gs})`);
+      document.getElementById('output').textContent = `transform="translate(${gx}, ${gy}) scale(${gs})"`;
+    }
+  </script>
+</body>
+</html>
