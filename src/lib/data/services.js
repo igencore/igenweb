@@ -52,6 +52,19 @@ export const services = [
 		parent: '1'
 	},
 	{
+		id: '2',
+		slug: 'fluidtransportation',
+		titleES: 'Transporte de fluidos',
+		titleEN: 'Fluid Transportation',
+		summaryES:
+			'Manejo de fluidos mediante bombeo y control de flujo: contamos con altos estándares de manufacturación, ofreciendo una vasta gama de equipos de bombeo y válvulas, en cualquier materialidad y para cualquier tipo de aplicación que el cliente necesite. Nos caracterizamos por priorizar e impulsar la fabricación nacional, fomentando así la economía chilena al generar empleo, reducir la dependencia del mercado externo, y a la vez mejorar la tecnología local. Una vez entregado el activo, nos aseguramos de que este funcione en perfectas condiciones, asesorando su puesta en marcha, manteniendo un servicio de supervisión con tecnología de monitoreo de condiciones y manteniendo un stock de repuesto al alcance del cliente.',
+		summaryEN:
+			'Fluid handling through pumping and flow control: We maintain high manufacturing standards, offering a wide range of pumping equipment and valves, in any material and for any application the customer may need. We are characterized by prioritizing and promoting national manufacturing, thus fostering the Chilean economy by generating employment, reducing dependence on the foreign market, and simultaneously improving local technology. Once the asset is delivered, we ensure that it functions perfectly, advising on its commissioning, maintaining a monitoring service with condition monitoring technology, and keeping a spare parts inventory readily available to the customer.',
+		icon: 'waves',
+		image: 'service_transporte_fluidos.jpg',
+		parent: null
+	},
+	{
 		id: '3',
 		slug: 'metalparts',
 		titleES: 'Metalmecánica',
@@ -115,18 +128,5 @@ export const services = [
 		icon: 'water',
 		image: 'service_circuito_fluidos.jpg',
 		parent: '4'
-	},
-	{
-		id: '2',
-		slug: 'fluidtransportation',
-		titleES: 'Transporte de fluidos',
-		titleEN: 'Fluid Transportation',
-		summaryES:
-			'Manejo de fluidos mediante bombeo y control de flujo: contamos con altos estándares de manufacturación, ofreciendo una vasta gama de equipos de bombeo y válvulas, en cualquier materialidad y para cualquier tipo de aplicación que el cliente necesite. Nos caracterizamos por priorizar e impulsar la fabricación nacional, fomentando así la economía chilena al generar empleo, reducir la dependencia del mercado externo, y a la vez mejorar la tecnología local. Una vez entregado el activo, nos aseguramos de que este funcione en perfectas condiciones, asesorando su puesta en marcha, manteniendo un servicio de supervisión con tecnología de monitoreo de condiciones y manteniendo un stock de repuesto al alcance del cliente.',
-		summaryEN:
-			'Fluid handling through pumping and flow control: We maintain high manufacturing standards, offering a wide range of pumping equipment and valves, in any material and for any application the customer may need. We are characterized by prioritizing and promoting national manufacturing, thus fostering the Chilean economy by generating employment, reducing dependence on the foreign market, and simultaneously improving local technology. Once the asset is delivered, we ensure that it functions perfectly, advising on its commissioning, maintaining a monitoring service with condition monitoring technology, and keeping a spare parts inventory readily available to the customer.',
-		icon: 'waves',
-		image: 'service_transporte_fluidos.jpg',
-		parent: null
 	}
 ];
